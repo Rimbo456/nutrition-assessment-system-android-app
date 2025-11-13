@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.gson)
+    implementation(libs.icons.lucide)
+    implementation(libs.accompanist.pager)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

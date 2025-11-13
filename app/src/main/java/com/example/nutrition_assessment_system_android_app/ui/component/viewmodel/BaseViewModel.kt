@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component
+package com.example.nutrition_assessment_system_android_app.ui.component.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +25,7 @@ abstract class BaseViewModel<VI : ViewIntent, VS : ViewState, VMS : ViewModelSta
         .map { it.toUiState() as VS }
         .stateIn(
             viewModelScope,
-            SharingStarted.Eagerly,
+            SharingStarted.Companion.Eagerly,
             viewModelState.value.toUiState() as VS
         )
 
