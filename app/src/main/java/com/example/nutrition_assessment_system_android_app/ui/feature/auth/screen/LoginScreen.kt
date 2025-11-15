@@ -22,6 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,6 +32,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
@@ -37,10 +41,23 @@ import com.composables.icons.lucide.Mail
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.component.button.PrimaryButton
 import com.example.nutrition_assessment_system_android_app.ui.component.textfield.CustomOutlinedTextField
+import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthIntent
+import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
+    viewModel: AuthViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        uiState.navigateToSignUpScreen?.let { event ->
+            navController.navigate("auth/register")
+            event.onConsumed()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -206,7 +223,9 @@ fun LoginScreen(
                 )
                 Text(
                     text = "Sign Up",
-                    modifier = Modifier.clickable { /* TODO: Navigate to registration */ },
+                    modifier = Modifier.clickable {
+                        viewModel.onTriggerIntent(AuthIntent.NavigateToSignUpScreen)
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold

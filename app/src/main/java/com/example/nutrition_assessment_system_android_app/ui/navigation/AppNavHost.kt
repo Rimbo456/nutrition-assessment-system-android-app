@@ -9,8 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
 
-typealias FeatureNavGraph = NavGraphBuilder.(NavHostController) -> Unit
-
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),

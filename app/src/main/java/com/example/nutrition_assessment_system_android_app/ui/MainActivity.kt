@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.navigation.AppNavHost
 import com.example.nutrition_assessment_system_android_app.ui.theme.NutritionassessmentsystemandroidappTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
