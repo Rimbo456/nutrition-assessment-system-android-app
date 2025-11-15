@@ -7,31 +7,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
 
 typealias FeatureNavGraph = NavGraphBuilder.(NavHostController) -> Unit
-
-sealed class Screen(val route: String) {
-    object Home : Screen("home")
-    object Profile : Screen("profile")
-    object Settings : Screen("settings")
-}
 
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Home.route,
-    featureNavGraphs: List<FeatureNavGraph> = emptyList()
+    startDestination: String = "home",
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        featureNavGraphs.forEach { graph ->
-            graph(navController)
-        }
-
-        composable(Screen.Home.route) {
-            // Home Screen Content
-        }
+        authNavGraph(navController)
     }
 }

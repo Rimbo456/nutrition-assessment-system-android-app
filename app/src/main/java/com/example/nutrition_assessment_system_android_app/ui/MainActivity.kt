@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.navigation.AppNavHost
-import com.example.nutrition_assessment_system_android_app.ui.navigation.Screen
 import com.example.nutrition_assessment_system_android_app.ui.theme.NutritionassessmentsystemandroidappTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +26,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
                         AppNavHost(
-                            startDestination = Screen.Home.route,
-                            featureNavGraphs = listOf(authNavGraph)
+                            startDestination = "auth/login",
                         )
                     }
                 }
