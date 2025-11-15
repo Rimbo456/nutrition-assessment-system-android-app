@@ -5,26 +5,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Mail
-import com.example.nutrition_assessment_system_android_app.R
+import com.composables.icons.lucide.User
 import com.example.nutrition_assessment_system_android_app.ui.component.button.PrimaryButton
 import com.example.nutrition_assessment_system_android_app.ui.component.textfield.CustomOutlinedTextField
 
 @Composable
-fun LoginScreen() {
+fun SignUpScreen() {
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(16.dp),
@@ -32,11 +27,15 @@ fun LoginScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Welcome back!"
+            text = "Create a new account"
         )
         CustomOutlinedTextField(
             icon = Lucide.Mail,
             label = "Email"
+        )
+        CustomOutlinedTextField(
+            icon = Lucide.User,
+            label = "Name"
         )
         CustomOutlinedTextField(
             icon = Lucide.Lock,
@@ -44,34 +43,16 @@ fun LoginScreen() {
         )
         PrimaryButton(
             onClick = { /* TODO: Handle login action */ },
-            text = "Login",
+            text = "Sign Up",
             modifier = Modifier.padding(top = 16.dp)
         )
-        Text(
-            text = "Forgot Password?",
-            modifier = Modifier.padding(top = 8.dp)
-        )
-        Button(
-            onClick = { /* TODO: Navigate to registration screen */ },
-            modifier = Modifier.padding(top = 16.dp),
-            shape = RoundedCornerShape(100)
-        ) {
-            Row {
-                Icon(
-                    painter = painterResource(R.drawable._123025_logo_google_g_icon),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-                Text(text = "Login with Google")
-            }
-        }
         Row {
             Text(
-                text = "Don't have an account? ",
+                text = "Already have an account? ",
                 modifier = Modifier.padding(top = 16.dp)
             )
             Text(
-                text = "Sign Up",
+                text = "Login",
                 modifier = Modifier.padding(top = 16.dp)
             )
         }
@@ -80,6 +61,6 @@ fun LoginScreen() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen()
+fun SignUpScreenPreview() {
+    SignUpScreen()
 }

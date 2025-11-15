@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,7 +25,6 @@ import com.composables.icons.lucide.LucideIcon
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.component.button.CustomIconButton
 import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 
 @Composable
 fun BottomTabBar(

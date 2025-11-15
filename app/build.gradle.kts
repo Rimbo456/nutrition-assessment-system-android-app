@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.icons.lucide)
     implementation(libs.accompanist.pager)
+    implementation(libs.ui.text.google.fonts)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
