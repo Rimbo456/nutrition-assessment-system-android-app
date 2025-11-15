@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.auth.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,18 +21,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Mail
@@ -39,9 +50,33 @@ import com.composables.icons.lucide.User
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.component.button.PrimaryButton
 import com.example.nutrition_assessment_system_android_app.ui.component.textfield.CustomOutlinedTextField
+import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthIntent
+import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthViewModel
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    viewModel: AuthViewModel = hiltViewModel(),
+    navController: NavController? = null
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+
+    // Handle registration success
+    LaunchedEffect(uiState) {
+        uiState.registrationSuccess?.let { event ->
+            // Navigate to home or show success message
+//            navController?.navigate(com.example.nutrition_assessment_system_android_app.ui.navigation.NavigationRoutes.Home.HOME) {
+//                popUpTo(com.example.nutrition_assessment_system_android_app.ui.navigation.NavigationRoutes.Auth.REGISTER) { inclusive = true }
+//            }
+            Log.d("SignUpScreen", "Registration successful for user: ${uiState.isAuthenticated}")
+            event.onConsumed()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -81,6 +116,26 @@ fun SignUpScreen() {
                 )
             }
 
+            // Error message
+            if (uiState.errorMessage != null) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = uiState.errorMessage ?: "",
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+
             // Sign Up Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,44 +151,62 @@ fun SignUpScreen() {
                 ) {
                     // Name Field
                     CustomOutlinedTextField(
+                        value = name,
+                        onValueChange = { name = it },
                         icon = Lucide.User,
                         label = "Full Name",
-//                        modifier = Modifier.fillMaxWidth()
+                        keyboardType = KeyboardType.Text
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Email Field
                     CustomOutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
                         icon = Lucide.Mail,
                         label = "Email",
-//                        modifier = Modifier.fillMaxWidth()
+                        keyboardType = KeyboardType.Email
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Password Field
                     CustomOutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
                         icon = Lucide.Lock,
                         label = "Password",
-//                        modifier = Modifier.fillMaxWidth()
+                        isPassword = true
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Confirm Password Field
                     CustomOutlinedTextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
                         icon = Lucide.Lock,
                         label = "Confirm Password",
-//                        modifier = Modifier.fillMaxWidth()
+                        isPassword = true
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Sign Up Button
                     PrimaryButton(
-                        onClick = { /* TODO: Handle sign up action */ },
-                        text = "Sign Up",
+                        onClick = {
+                            viewModel.onTriggerIntent(
+                                AuthIntent.Register(
+                                    name = name,
+                                    email = email,
+                                    password = password,
+                                    confirmPassword = confirmPassword
+                                )
+                            )
+                        },
+                        text = if (uiState.isLoading) "Signing Up..." else "Sign Up",
+                        enabled = !uiState.isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -171,6 +244,7 @@ fun SignUpScreen() {
                     // Google Sign Up Button
                     Button(
                         onClick = { /* TODO: Handle Google sign up */ },
+                        enabled = !uiState.isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
@@ -214,10 +288,26 @@ fun SignUpScreen() {
                 )
                 Text(
                     text = "Sign In",
-                    modifier = Modifier.clickable { /* TODO: Navigate to login */ },
+                    modifier = Modifier.clickable {
+                        navController?.navigateUp()
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        // Loading overlay
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

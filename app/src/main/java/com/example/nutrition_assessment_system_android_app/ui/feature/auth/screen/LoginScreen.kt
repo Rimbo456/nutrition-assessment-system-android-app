@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -50,6 +53,9 @@ fun LoginScreen(
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     LaunchedEffect(uiState) {
         uiState.navigateToSignUpScreen?.let { event ->
@@ -113,7 +119,8 @@ fun LoginScreen(
                     CustomOutlinedTextField(
                         icon = Lucide.Mail,
                         label = "Email",
-//                        modifier = Modifier.fillMaxWidth()
+                        value = email,
+                        onValueChange = { email = it }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -122,7 +129,9 @@ fun LoginScreen(
                     CustomOutlinedTextField(
                         icon = Lucide.Lock,
                         label = "Password",
-//                        modifier = Modifier.fillMaxWidth()
+                        value = password,
+                        onValueChange = { password = it },
+                        isPassword = true
                     )
 
                     // Forgot Password

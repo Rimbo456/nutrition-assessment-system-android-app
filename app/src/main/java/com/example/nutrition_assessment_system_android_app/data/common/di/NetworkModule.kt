@@ -1,5 +1,7 @@
 package com.example.nutrition_assessment_system_android_app.data.common.di
 
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.interceptor.ResponseLoggingInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +21,7 @@ object NetworkModule {
 //        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(ResponseLoggingInterceptor())
 //            .addInterceptor(authInterceptor)
             .build()
     }
@@ -27,9 +30,15 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.example.com/") // Replace with your base URL
+            .baseUrl("http://192.168.2.105:3000/") // Replace with your base URL
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService {
+        return retrofit.create(UserApiService::class.java)
     }
 }
