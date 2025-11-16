@@ -50,7 +50,7 @@ fun UserDto.toUser(): User {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
-        preferences = this.preferences,
+        preferences = this.preferences?.toPreferences(),
         createAt = this.createAt,
     )
 }
@@ -67,7 +67,7 @@ fun UserEntity.toUser(): User {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
-        preferences = this.preferences,
+        preferences = this.preferences?.toPreferences(),
         createAt = this.createAt,
     )
 }

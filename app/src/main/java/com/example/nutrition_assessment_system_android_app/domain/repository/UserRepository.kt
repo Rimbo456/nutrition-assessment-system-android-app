@@ -12,4 +12,13 @@ interface UserRepository {
         email: String,
         password: String
     ): Resource<User>
+
+    suspend fun loginWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Resource<User>
+
+    suspend fun loginWithGoogle(
+        googleToken: String
+    ): Resource<User>
 }

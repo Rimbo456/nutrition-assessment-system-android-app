@@ -1,10 +1,15 @@
 package com.example.nutrition_assessment_system_android_app.data.common.di
 
+import android.content.Context
+import com.example.nutrition_assessment_system_android_app.data.auth.FirebaseAuthHelper
+import com.example.nutrition_assessment_system_android_app.ui.common.auth.GoogleSignInHelper
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.interceptor.ResponseLoggingInterceptor
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -35,6 +40,16 @@ object NetworkModule {
             .client(client)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuthHelper(
+        firebaseAuth: FirebaseAuth
+    ): FirebaseAuthHelper = FirebaseAuthHelper(firebaseAuth)
 
     @Provides
     @Singleton

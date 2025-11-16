@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "633806623451",
+    "project_id": "nutrition-assessment-system",
+    "storage_bucket": "nutrition-assessment-system.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633806623451:android:3a00244b39c582cbbeb2fe",
+        "android_client_info": {
+          "package_name": "com.example.nutrition_assessment_system_android_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633806623451-v5cpcdfc61nkhl40ghd4ts114ps4jfhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5E270b7p8uwBsc8qT7qwu3lFrimlOxb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633806623451-v5cpcdfc61nkhl40ghd4ts114ps4jfhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

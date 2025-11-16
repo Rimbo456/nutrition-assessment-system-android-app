@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel
 
+import android.content.Intent
 import com.example.nutrition_assessment_system_android_app.domain.model.User
 import com.example.nutrition_assessment_system_android_app.ui.interfaces.OneTimeEvent
 import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewModelState
@@ -11,7 +12,9 @@ class AuthViewStates {
         val errorMessage: String? = null,
         val isAuthenticated: Boolean = false,
         val navigateToSignUpScreen: OneTimeEvent<Boolean>? = null,
-        val registrationSuccess: OneTimeEvent<User>? = null
+        val registrationSuccess: OneTimeEvent<User>? = null,
+        val loginSuccess: OneTimeEvent<User>? = null,
+        val googleSignInIntent: OneTimeEvent<Intent>? = null
     ) : ViewState()
 
     data class AuthViewModelState(
@@ -19,7 +22,9 @@ class AuthViewStates {
         val errorMessage: String? = null,
         val isAuthenticated: Boolean = false,
         val navigateToSignUpScreen: OneTimeEvent<Boolean>? = null,
-        val registrationSuccess: OneTimeEvent<User>? = null
+        val registrationSuccess: OneTimeEvent<User>? = null,
+        val loginSuccess: OneTimeEvent<User>? = null,
+        val googleSignInIntent: OneTimeEvent<Intent>? = null
     ) : ViewModelState() {
         override fun toUiState(): ViewState {
             return AuthViewState(
@@ -27,7 +32,9 @@ class AuthViewStates {
                 errorMessage = errorMessage,
                 isAuthenticated = isAuthenticated,
                 navigateToSignUpScreen = navigateToSignUpScreen,
-                registrationSuccess = registrationSuccess
+                registrationSuccess = registrationSuccess,
+                loginSuccess = loginSuccess,
+                googleSignInIntent = googleSignInIntent
             )
         }
     }

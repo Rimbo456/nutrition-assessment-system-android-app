@@ -12,7 +12,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable("auth/login") { backStackEntry ->
         LoginScreen(
             viewModel = hiltViewModel(backStackEntry),
-            navController = navController
+            navController = navController,
+            navigateToHome = {
+                navController.navigate("home")
+            }
         )
     }
 

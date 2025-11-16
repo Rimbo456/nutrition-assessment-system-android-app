@@ -13,7 +13,7 @@ data class UserDto (
     val height: Float? = null,
     val activityLevel: String? = null,
     val goal: String? = null,
-    val preferences: List<String>? = emptyList(),
+    val preferences: PreferencesDto? = null,
     @SerializedName("createdAt")
     val createAt: String,
 )

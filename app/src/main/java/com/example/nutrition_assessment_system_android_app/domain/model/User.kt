@@ -11,6 +11,6 @@ data class User(
     val height: Float?,
     val activityLevel: String?,
     val goal: String?,
-    val preferences: List<String>?,
+    val preferences: Preferences?,
     val createAt: String,
 )

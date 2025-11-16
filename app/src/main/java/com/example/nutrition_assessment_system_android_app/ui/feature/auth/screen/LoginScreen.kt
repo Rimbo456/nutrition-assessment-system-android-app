@@ -1,5 +1,8 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.auth.screen
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,17 +53,31 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewm
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    navigateToHome: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        viewModel.onTriggerIntent(
+            AuthIntent.LoginWithGoogle(result.data)
+        )
+    }
+
     LaunchedEffect(uiState) {
+        Log.d("LoginScreen", "Error: ${uiState.errorMessage}")
+
         uiState.navigateToSignUpScreen?.let { event ->
             navController.navigate("auth/register")
             event.onConsumed()
+        }
+        uiState.googleSignInIntent?.let { intent ->
+            googleSignInLauncher.launch(intent.data)
         }
     }
 
@@ -90,8 +107,9 @@ fun LoginScreen(
             ) {
                 Text(
                     text = "Welcome Back!",
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -150,7 +168,14 @@ fun LoginScreen(
 
                     // Login Button
                     PrimaryButton(
-                        onClick = { /* TODO: Handle login action */ },
+                        onClick = {
+                            viewModel.onTriggerIntent(
+                                AuthIntent.LoginWithEmailAndPassword(
+                                    email = email,
+                                    password = password
+                                )
+                            )
+                        },
                         text = "Sign In",
                         modifier = Modifier
                             .fillMaxWidth()
@@ -188,7 +213,11 @@ fun LoginScreen(
 
                     // Google Sign In Button
                     Button(
-                        onClick = { /* TODO: Handle Google sign in */ },
+                        onClick = {
+                            viewModel.onTriggerIntent(
+                                AuthIntent.GetSignInIntent
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),

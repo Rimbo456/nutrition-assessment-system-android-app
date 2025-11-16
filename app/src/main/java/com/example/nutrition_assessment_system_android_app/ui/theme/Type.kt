@@ -17,17 +17,18 @@ val provider = GoogleFont.Provider(
 )
 
 val bodyFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Quicksand"),
-        fontProvider = provider,
-    )
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Normal),   // 400
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Medium),   // 500
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.SemiBold), // 600
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Bold),     // 700
 )
 
 val displayFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Quicksand"),
-        fontProvider = provider,
-    )
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Light),   // 300
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Normal),   // 400
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Medium),   // 500
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.SemiBold), // 600
+    Font(GoogleFont("Quicksand"), provider, weight = FontWeight.Bold),     // 700
 )
 
 // Default Material 3 typography values

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">nutrition-assessment-system-android-app</string>
+    <string name="default_web_client_id">633806623451-v5cpcdfc61nkhl40ghd4ts114ps4jfhp.apps.googleusercontent.com</string>
 </resources>

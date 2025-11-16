@@ -21,6 +21,10 @@ navigationCompose = "2.9.6"
 icons-lucide = "1.1.0"
 accompanist-pager = "0.36.0"
 ui-text-google-fonts = "1.9.4"
+firebase-auth = "24.0.1"
+firebase-bom = "34.6.0"
+play-services-auth = "21.4.0"
+google-services = "4.4.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +58,9 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 icons-lucide = { group = "com.composables", name = "icons-lucide", version.ref = "icons-lucide" }
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist-pager" }
 ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "ui-text-google-fonts" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -61,4 +68,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
