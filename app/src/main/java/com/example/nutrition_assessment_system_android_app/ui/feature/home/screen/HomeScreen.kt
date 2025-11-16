@@ -7,7 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.example.nutrition_assessment_system_android_app.ui.component.bar.BottomTabBar
+import com.example.nutrition_assessment_system_android_app.ui.common.component.bar.BottomTabBar
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.component.DailyIntakeCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.component.StatisticsCard
 import com.google.accompanist.pager.HorizontalPager
