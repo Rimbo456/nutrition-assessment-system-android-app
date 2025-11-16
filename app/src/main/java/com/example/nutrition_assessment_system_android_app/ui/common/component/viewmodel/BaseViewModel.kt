@@ -1,12 +1,12 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.viewmodel
+package com.example.nutrition_assessment_system_android_app.ui.common.component.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nutrition_assessment_system_android_app.domain.util.Resource
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.OneTimeEvent
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewIntent
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewModelState
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewState
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.OneTimeEvent
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewIntent
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewModelState
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

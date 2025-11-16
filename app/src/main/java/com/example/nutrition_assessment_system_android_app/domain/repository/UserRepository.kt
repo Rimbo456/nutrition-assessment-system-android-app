@@ -21,4 +21,7 @@ interface UserRepository {
     suspend fun loginWithGoogle(
         googleToken: String
     ): Resource<User>
+
+    suspend fun checkAuthStatus(): Resource<Boolean>
+    fun observeAuthState(): Flow<Boolean>
 }

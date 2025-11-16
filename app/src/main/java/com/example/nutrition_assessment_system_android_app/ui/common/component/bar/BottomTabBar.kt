@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.bar
+package com.example.nutrition_assessment_system_android_app.ui.common.component.bar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -23,7 +23,7 @@ import com.composables.icons.lucide.Camera
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.LucideIcon
 import com.example.nutrition_assessment_system_android_app.R
-import com.example.nutrition_assessment_system_android_app.ui.component.button.CustomIconButton
+import com.example.nutrition_assessment_system_android_app.ui.common.component.button.CustomIconButton
 import com.google.accompanist.pager.PagerState
 
 @Composable

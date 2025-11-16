@@ -14,7 +14,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
             viewModel = hiltViewModel(backStackEntry),
             navController = navController,
             navigateToHome = {
-                navController.navigate("home")
+                navController.navigate("home") {
+                    popUpTo("auth/login") {
+                        inclusive = true
+                    }
+                }
             }
         )
     }

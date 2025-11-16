@@ -2,9 +2,9 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.auth.view
 
 import android.content.Intent
 import com.example.nutrition_assessment_system_android_app.domain.model.User
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.OneTimeEvent
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewModelState
-import com.example.nutrition_assessment_system_android_app.ui.interfaces.ViewState
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.OneTimeEvent
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewModelState
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewState
 
 class AuthViewStates {
     data class AuthViewState(
@@ -14,7 +14,7 @@ class AuthViewStates {
         val navigateToSignUpScreen: OneTimeEvent<Boolean>? = null,
         val registrationSuccess: OneTimeEvent<User>? = null,
         val loginSuccess: OneTimeEvent<User>? = null,
-        val googleSignInIntent: OneTimeEvent<Intent>? = null
+        val googleSignInIntent: OneTimeEvent<Intent>? = null,
     ) : ViewState()
 
     data class AuthViewModelState(
@@ -24,7 +24,8 @@ class AuthViewStates {
         val navigateToSignUpScreen: OneTimeEvent<Boolean>? = null,
         val registrationSuccess: OneTimeEvent<User>? = null,
         val loginSuccess: OneTimeEvent<User>? = null,
-        val googleSignInIntent: OneTimeEvent<Intent>? = null
+        val googleSignInIntent: OneTimeEvent<Intent>? = null,
+        val authToken: String? = null
     ) : ViewModelState() {
         override fun toUiState(): ViewState {
             return AuthViewState(

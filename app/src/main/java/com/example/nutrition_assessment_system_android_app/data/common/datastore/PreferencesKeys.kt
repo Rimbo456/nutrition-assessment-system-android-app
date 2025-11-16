@@ -4,4 +4,5 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 object PreferencesKeys {
     val APP_LANGUAGE = stringPreferencesKey("app_language")
+    val AUTH_TOKEN = stringPreferencesKey("auth_token")
 }

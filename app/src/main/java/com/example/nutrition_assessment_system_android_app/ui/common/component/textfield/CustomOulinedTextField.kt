@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.textfield
+package com.example.nutrition_assessment_system_android_app.ui.common.component.textfield
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

@@ -45,8 +45,8 @@ import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Mail
 import com.example.nutrition_assessment_system_android_app.R
-import com.example.nutrition_assessment_system_android_app.ui.component.button.PrimaryButton
-import com.example.nutrition_assessment_system_android_app.ui.component.textfield.CustomOutlinedTextField
+import com.example.nutrition_assessment_system_android_app.ui.common.component.button.PrimaryButton
+import com.example.nutrition_assessment_system_android_app.ui.common.component.textfield.CustomOutlinedTextField
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.viewmodel.AuthViewModel
 
@@ -79,7 +79,13 @@ fun LoginScreen(
         uiState.googleSignInIntent?.let { intent ->
             googleSignInLauncher.launch(intent.data)
         }
+        uiState.loginSuccess?.let { event ->
+            navigateToHome()
+            event.onConsumed()
+        }
     }
+
+
 
     Box(
         modifier = Modifier

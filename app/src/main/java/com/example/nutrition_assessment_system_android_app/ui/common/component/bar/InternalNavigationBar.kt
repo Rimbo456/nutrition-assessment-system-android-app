@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.bar
+package com.example.nutrition_assessment_system_android_app.ui.common.component.bar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.nutrition_assessment_system_android_app.ui.component.button.CustomIconButton
+import com.example.nutrition_assessment_system_android_app.ui.common.component.button.CustomIconButton
 
 @Composable
 fun InternalNavigationBar(

@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.di
+package com.example.nutrition_assessment_system_android_app.ui.common.di
 
 import android.content.Context
 import com.example.nutrition_assessment_system_android_app.ui.common.auth.GoogleSignInHelper

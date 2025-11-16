@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.button
+package com.example.nutrition_assessment_system_android_app.ui.common.component.button
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun PrimaryButton(

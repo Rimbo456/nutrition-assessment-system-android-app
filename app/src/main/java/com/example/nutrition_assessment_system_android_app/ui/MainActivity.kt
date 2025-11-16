@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
                         AppNavHost(
-                            startDestination = "auth/login",
+                            startDestination = "splash",
                         )
                     }
                 }

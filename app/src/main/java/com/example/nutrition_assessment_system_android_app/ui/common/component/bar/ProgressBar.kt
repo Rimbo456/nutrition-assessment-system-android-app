@@ -1,4 +1,4 @@
-package com.example.nutrition_assessment_system_android_app.ui.component.bar
+package com.example.nutrition_assessment_system_android_app.ui.common.component.bar
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
