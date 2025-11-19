@@ -34,7 +34,9 @@ fun PreChatScreen(
     val colors = MaterialTheme.colorScheme
 
     Surface(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(bottom = 75.dp),
         color = colors.surface,
     ) {
         Column(

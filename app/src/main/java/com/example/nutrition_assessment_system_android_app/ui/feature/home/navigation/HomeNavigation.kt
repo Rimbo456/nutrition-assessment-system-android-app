@@ -7,6 +7,9 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.home.scree
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable("home") { backStackEntry ->
-        HomeScreen()
+        HomeScreen(
+            //viewModel = hiltViewModel(backStackEntry)
+            navController = navController
+        )
     }
 }

@@ -25,6 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.composables.icons.lucide.ArrowLeft
+import com.composables.icons.lucide.History
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Settings
+import com.example.nutrition_assessment_system_android_app.ui.common.component.bar.InternalNavigationBar
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.BotMessageBubble
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.BotTypingIndicator
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.ChatInputBar
@@ -34,7 +40,9 @@ import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreen() {
+fun ChatScreen(
+    navController: NavController
+) {
     var inputText by remember { mutableStateOf("") }
     val messages = remember { mutableStateListOf<ChatMessage>() }
     var isBotTyping by remember { mutableStateOf(false) }
@@ -83,6 +91,16 @@ fun ChatScreen() {
 
     Scaffold(
         containerColor = colors.background,
+        topBar = {
+            InternalNavigationBar(
+                leftIcon = Lucide.ArrowLeft,
+                leftIconInRightZone = Lucide.History,
+                rightIconInRightZone = Lucide.Settings,
+                onLeftButtonClick = { navController.popBackStack() },
+                onLeftButtonInRightZoneClick = { TODO() },
+                onRightButtonInRightZoneClick = { TODO() }
+            )
+        },
         bottomBar = {
             Column(
                 modifier = Modifier
@@ -128,12 +146,19 @@ fun ChatScreen() {
                 )
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 state = listState,
                 contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp),
                 reverseLayout = true,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                if (isBotTyping) {
+                    item(key = "typing_indicator") {
+                        BotTypingIndicator()
+                    }
+                }
+
                 items(messages, key = { it.id }) { msg ->
                     AnimatedVisibility(
                         visible = true,
@@ -156,12 +181,6 @@ fun ChatScreen() {
                         }
                     }
                 }
-
-                if (isBotTyping) {
-                    item {
-                        BotTypingIndicator()
-                    }
-                }
             }
         }
     }
@@ -177,5 +196,4 @@ private data class ChatMessage(
 @Preview(showBackground = true)
 @Composable
 fun ChatScreenPreview() {
-    ChatScreen()
 }

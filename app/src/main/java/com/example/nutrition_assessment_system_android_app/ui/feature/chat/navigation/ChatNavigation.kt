@@ -7,6 +7,9 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.chat.scree
 
 fun NavGraphBuilder.chatNavGraph(navController: NavHostController) {
     composable("chat") { backStackEntry ->
-        ChatScreen()
+        ChatScreen(
+            //viewModel = hiltViewModel(backStackEntry)
+            navController = navController
+        )
     }
 }
