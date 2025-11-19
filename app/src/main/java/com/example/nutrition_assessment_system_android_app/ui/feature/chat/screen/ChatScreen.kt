@@ -2,6 +2,7 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.chat.scre
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.BotMessageBubble
@@ -29,13 +31,6 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.chat.compo
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.SuggestionChipsRow
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.component.UserMessageBubble
 import kotlinx.coroutines.delay
-
-private data class ChatMessage(
-    val id: Long,
-    val text: String,
-    val isUser: Boolean,
-    val time: String,
-)
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -48,10 +43,10 @@ fun ChatScreen() {
         "Phân tích dinh dưỡng của bữa ăn",
         "Tạo kế hoạch tập luyện",
         "Gợi ý thực đơn cho 1 ngày",
+        "Theo dõi lượng nước uống"
     )
 
     fun nowTime(): String {
-        // Đơn giản: hiển thị hh:mm giả lập
         return "09:2${messages.size}"
     }
 
@@ -67,11 +62,10 @@ fun ChatScreen() {
         isBotTyping = true
     }
 
-    // Giả lập bot trả lời sau khi user gửi
     LaunchedEffect(messages.size) {
         if (messages.firstOrNull()?.isUser == true) {
             isBotTyping = true
-            delay(800)
+            delay(1200)
             val lastUserText = messages.first().text
             val botReply = "Mình đã ghi nhận: \"$lastUserText\". Mình sẽ phân tích và gợi ý phù hợp cho bạn."
             messages.add(0, ChatMessage(
@@ -85,22 +79,30 @@ fun ChatScreen() {
     }
 
     val listState = rememberLazyListState()
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = colors.background,
         bottomBar = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                colors.background.copy(alpha = 0.0f),
+                                colors.background.copy(alpha = 0.8f),
+                                colors.background
+                            )
+                        )
+                    )
             ) {
                 SuggestionChipsRow(
                     suggestions = suggestions,
                     onSuggestionClick = { prompt ->
-                        // điền prompt vào input để user chỉnh/sent
                         inputText = prompt
                     },
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 ChatInputBar(
@@ -115,22 +117,30 @@ fun ChatScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            colors.background,
+                            colors.surface.copy(alpha = 0.3f),
+                            colors.background
+                        )
+                    )
+                )
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 4.dp),
+                modifier = Modifier.fillMaxSize(),
                 state = listState,
-                contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
+                contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp),
                 reverseLayout = true,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(messages, key = { it.id }) { msg ->
                     AnimatedVisibility(
                         visible = true,
                         enter = slideInVertically(
-                            initialOffsetY = { fullHeight -> fullHeight / 2 }
-                        ) + fadeIn(),
+                            initialOffsetY = { fullHeight -> fullHeight / 3 },
+                            animationSpec = tween(300)
+                        ) + fadeIn(animationSpec = tween(300)),
                         exit = slideOutVertically() + fadeOut()
                     ) {
                         if (msg.isUser) {
@@ -157,10 +167,15 @@ fun ChatScreen() {
     }
 }
 
+private data class ChatMessage(
+    val id: Long,
+    val text: String,
+    val isUser: Boolean,
+    val time: String,
+)
+
 @Preview(showBackground = true)
 @Composable
-private fun ChatScreenPreview() {
-    MaterialTheme {
-        ChatScreen()
-    }
+fun ChatScreenPreview() {
+    ChatScreen()
 }
