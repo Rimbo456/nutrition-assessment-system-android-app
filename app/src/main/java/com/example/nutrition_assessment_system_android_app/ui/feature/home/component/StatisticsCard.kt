@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.ChartPie
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
-import com.example.nutrition_assessment_system_android_app.ui.component.bar.ProgressBar
+import com.example.nutrition_assessment_system_android_app.ui.common.component.bar.ProgressBar
 
 @Composable
 fun StatisticsCard() {
