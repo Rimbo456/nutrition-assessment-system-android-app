@@ -1,8 +1,13 @@
-package com.example.nutrition_assessment_system_android_app.ui.feature.home.component
+package com.example.nutrition_assessment_system_android_app.ui.feature.overview.component
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,16 +17,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,22 +41,35 @@ fun PieProgress(
     modifier: Modifier = Modifier,
     size: Dp = 120.dp,
     strokeWidth: Dp = 12.dp,
-    backgroundColor: Color = Color(0xFFE0E0E0),
+    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     progressColor: Color = MaterialTheme.colorScheme.primary,
-    animationDuration: Int = 800,
-    animationDelay: Int = 0
+    animationDuration: Int = 2000,
+    animationDelay: Int = 300
 ) {
-    val target = (progress.toFloat() / sum.toFloat()).coerceIn(0f, 1f)
-    val animated = animateFloatAsState(
-        targetValue = target,
+    // State to trigger animation
+    var startAnimation by remember { mutableStateOf(false) }
+
+    // Calculate target values
+    val targetProgress = (progress.toFloat() / sum.toFloat()).coerceIn(0f, 1f)
+
+    // Animated progress (0f to targetProgress)
+    val animatedProgress by animateFloatAsState(
+        targetValue = if (startAnimation) targetProgress else 0f,
         animationSpec = tween(
             durationMillis = animationDuration,
             delayMillis = animationDelay,
             easing = LinearOutSlowInEasing
-        )
-    ).value
+        ),
+        label = "progress_animation"
+    )
 
-    val animatedProgress = (animated * sum).roundToInt()
+    // Animated progress value for display (0 to actual progress value)
+    val animatedProgressValue = (animatedProgress * sum).roundToInt()
+
+    // Start animation when component is first composed
+    LaunchedEffect(key1 = progress, key2 = sum) {
+        startAnimation = true
+    }
 
     Box(
         modifier = modifier.size(size),
@@ -73,7 +93,7 @@ fun PieProgress(
             drawArc(
                 color = progressColor,
                 startAngle = -90f,
-                sweepAngle = 360f * animated,
+                sweepAngle = 360f * animatedProgress,
                 useCenter = false,
                 style = stroke
             )
@@ -83,31 +103,51 @@ fun PieProgress(
             modifier = Modifier
                 .size(size - (strokeWidth + 5.dp))
                 .clip(shape = RoundedCornerShape(100))
-                .background(color = Color.Transparent),
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surfaceContainer,
+                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f)
+                        )
+                    )
+                ),
             contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
                     .size((size - (strokeWidth + 5.dp)) - 20.dp)
                     .clip(shape = RoundedCornerShape(100))
-                    .background(color = Color.White),
+                    .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surfaceContainerHighest,
+                            MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.8f)
+                        )
+                    )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "$animatedProgress",
-                        style = MaterialTheme.typography.titleMedium
+                        text = "$animatedProgressValue",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     )
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .height(1.dp)
+                            .height(1.dp),
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                     )
                     Text(
                         text = "$sum",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     )
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.nutrition_assessment_system_android_app.ui.common.component.bar
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +37,8 @@ fun BottomTabBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp),
+            .padding(horizontal = 4.dp)
+            .background(MaterialTheme.colorScheme.surface),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -58,8 +61,8 @@ fun BottomTabBar(
         CustomIconButton(
             icon = Lucide.Camera,
             onClick = {  },
-            colors = IconButtonDefaults.iconButtonColors(Color.Black),
-            iconColors = Color.White,
+            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.primary),
+            iconColors = MaterialTheme.colorScheme.onPrimary,
             sizeIcon = 25.dp,
             modifier = Modifier.size(72.dp)
         )
@@ -75,7 +78,7 @@ fun BottomTabBar(
             modifier = Modifier
                 .size(60.dp)
                 .clip(shape = RoundedCornerShape(100))
-                .border(width = 2.dp, color = Color(0xFFB1CC70), shape = RoundedCornerShape(100))
+                .border(width = 2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(100))
         ) {
             Image(
                 painter = painterResource(R.drawable.avatar),
@@ -105,7 +108,7 @@ fun BottomTabBarItem(
         LucideIcon(
             id = id,
             contentDescription = contentDescription,
-            tint = if (isSelected) Color(0xFFB1CC70) else Color.Black,
+            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(sizeIcon)
         )
     }
