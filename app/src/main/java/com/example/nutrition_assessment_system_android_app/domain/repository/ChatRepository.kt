@@ -11,5 +11,5 @@ interface ChatRepository {
 
     suspend fun createSession(title: String? = null): Resource<ChatSession>
 
-    suspend fun sendMessage(message: Message): Resource<Message>
+    suspend fun sendMessage(message: String, sessionId: String): Resource<Message>
 }

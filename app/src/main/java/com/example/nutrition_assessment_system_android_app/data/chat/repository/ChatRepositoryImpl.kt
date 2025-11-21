@@ -67,12 +67,13 @@ class ChatRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun sendMessage(message: Message): Resource<Message> {
+    override suspend fun sendMessage(message: String, sessionId: String): Resource<Message> {
         return ApiHelper.safeApiCall(
             apiCall = {
                 chatApiService.sendMessage(
                     SendMessageRequest(
-                        message = message.toDto()
+                        message = message,
+                        sessionId = sessionId,
                     )
                 )
             },
