@@ -2,6 +2,7 @@ package com.example.nutrition_assessment_system_android_app.data.common.di
 
 import android.content.Context
 import com.example.nutrition_assessment_system_android_app.data.auth.FirebaseAuthHelper
+import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.ChatApiService
 import com.example.nutrition_assessment_system_android_app.ui.common.auth.GoogleSignInHelper
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.interceptor.ResponseLoggingInterceptor
@@ -55,5 +56,11 @@ object NetworkModule {
     @Singleton
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatApiService(retrofit: Retrofit): ChatApiService {
+        return retrofit.create(ChatApiService::class.java)
     }
 }
