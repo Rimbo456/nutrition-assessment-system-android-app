@@ -55,7 +55,7 @@ fun HomeScreen(
                 }
                 2 -> {
                     PreChatScreen(
-                        onStartChat = {
+                        onStartChat = { sessionId ->
                             navController.navigate("chat")
                         }
                     )

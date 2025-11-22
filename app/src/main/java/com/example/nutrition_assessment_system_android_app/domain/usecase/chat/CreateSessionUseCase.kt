@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 class CreateSessionUseCase @Inject constructor(
     private val chatRepository: ChatRepository
-): UseCase<SendMessageParams, Resource<ChatSession>>() {
-    override suspend fun execute(param: SendMessageParams): Resource<ChatSession> {
+): UseCase<Unit, Resource<ChatSession>>() {
+    override suspend fun execute(param: Unit): Resource<ChatSession> {
         return chatRepository.createSession()
     }
 }

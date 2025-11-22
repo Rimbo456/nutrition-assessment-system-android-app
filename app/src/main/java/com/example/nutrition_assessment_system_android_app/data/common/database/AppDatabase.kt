@@ -13,7 +13,7 @@ import com.example.nutrition_assessment_system_android_app.data.user.datasource.
 
 @Database(
     entities = [UserEntity::class, MessageEntity::class, ChatSessionEntity::class],
-    version = 2
+    version = 1
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

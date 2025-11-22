@@ -3,5 +3,6 @@ package com.example.nutrition_assessment_system_android_app.data.chat.datasource
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.dto.MessageDto
 
 data class GetMessagesResponse(
-    val messages: List<MessageDto>
+    val success: Boolean,
+    val data: List<MessageDto>
 )

@@ -3,5 +3,6 @@ package com.example.nutrition_assessment_system_android_app.data.chat.datasource
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.dto.ChatSessionDto
 
 data class CreateSessionResponse(
-    val session: ChatSessionDto,
+    val success: Boolean,
+    val data: ChatSessionDto,
 )

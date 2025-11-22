@@ -5,7 +5,6 @@ import com.example.nutrition_assessment_system_android_app.data.chat.datasource.
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.local.MessageDao
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.dto.ChatSessionDto
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.dto.MessageDto
-import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.request.GetMessagesRequest
 import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.request.SendMessageRequest
 import com.example.nutrition_assessment_system_android_app.data.chat.mapper.toDomain
 import com.example.nutrition_assessment_system_android_app.data.chat.mapper.toDto
@@ -44,9 +43,9 @@ class ChatRepositoryImpl @Inject constructor(
             }
 
             override suspend fun createCall(): List<MessageDto> {
-                val res = chatApiService.getMessages(GetMessagesRequest(sessionId))
+                val res = chatApiService.getMessages(sessionId)
                 if (res.isSuccessful) {
-                    return res.body()?.messages ?: emptyList()
+                    return res.body()?.data ?: emptyList()
                 } else throw Exception("Api error code: ${res.code()}")
             }
 
@@ -62,7 +61,7 @@ class ChatRepositoryImpl @Inject constructor(
                 chatApiService.createSession()
             },
             transform = { response ->
-                response.session.toDomain()
+                response.data.toDomain()
             }
         )
     }
@@ -78,7 +77,7 @@ class ChatRepositoryImpl @Inject constructor(
                 )
             },
             transform = { response ->
-                response.message.toDomain()
+                response.data.toDomain()
             }
         )
     }
@@ -98,7 +97,7 @@ class ChatRepositoryImpl @Inject constructor(
             override suspend fun createCall(): List<ChatSessionDto> {
                 val res = chatApiService.getSessions()
                 if (res.isSuccessful) {
-                    return res.body()?.sessions ?: emptyList()
+                    return res.body()?.data ?: emptyList()
                 } else throw Exception("Api error code: ${res.code()}")
             }
 

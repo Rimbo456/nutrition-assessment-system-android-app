@@ -5,6 +5,6 @@ data class ChatSessionDto(
     val userId: String,
     val title: String?,
     val lastMessage: String?,
-    val createdAt: Long,
-    val updatedAt: Long,
+    val createdAt: String, // ISO8601 string from backend
+    val updatedAt: String, // ISO8601 string from backend
 )

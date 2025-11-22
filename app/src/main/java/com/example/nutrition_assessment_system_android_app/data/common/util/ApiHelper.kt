@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.data.common.util
 
+import android.util.Log
 import com.example.nutrition_assessment_system_android_app.domain.util.Resource
 import com.google.gson.Gson
 import retrofit2.HttpException
@@ -16,15 +17,25 @@ object ApiHelper {
             val response = apiCall()
 
             if (response.isSuccessful && response.body() != null) {
+                // Debug log: serialized success body before mapping
+                try {
+                    Log.d("API_DEBUG", "Success raw body: ${Gson().toJson(response.body())}")
+                } catch (_: Exception) {}
                 Resource.Success(transform(response.body()!!))
             } else {
+                // Debug log: error body
+                val errorStr = response.errorBody()?.string()
+                Log.d("API_DEBUG", "Error raw body: $errorStr")
                 Resource.Error(parseErrorMessage(response))
             }
         } catch (e: HttpException) {
+            Log.d("API_DEBUG", "HttpException: ${e.message()}")
             Resource.Error("Network error: ${e.message()}")
-        } catch (_: IOException) {
+        } catch (io: IOException) {
+            Log.d("API_DEBUG", "IOException: ${io.localizedMessage}")
             Resource.Error("Connection failed. Please check your internet connection.")
         } catch (e: Exception) {
+            Log.d("API_DEBUG", "Unexpected exception: ${e.localizedMessage}")
             Resource.Error("An unexpected error occurred: ${e.localizedMessage ?: "Unknown error"}")
         }
     }
