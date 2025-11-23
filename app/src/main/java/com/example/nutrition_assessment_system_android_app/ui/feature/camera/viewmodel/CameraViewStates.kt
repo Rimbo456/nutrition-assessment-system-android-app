@@ -1,0 +1,35 @@
+package com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel
+
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewModelState
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewState
+
+sealed class CameraViewStates {
+    data class CameraViewState(
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null,
+        val isPermissionGranted: Boolean = false,
+        val shouldShowRationale: Boolean = false,
+        val triggerPermissionRequest: Boolean = false,
+        val showSettingsHint: Boolean = false,
+    ): ViewState()
+
+    data class CameraViewModelState(
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null,
+        val isPermissionGranted: Boolean = false,
+        val shouldShowRationale: Boolean = false,
+        val triggerPermissionRequest: Boolean = false,
+        val showSettingsHint: Boolean = false,
+    ): ViewModelState() {
+        override fun toUiState(): ViewState {
+            return CameraViewState(
+                isLoading = isLoading,
+                errorMessage = errorMessage,
+                isPermissionGranted = isPermissionGranted,
+                shouldShowRationale = shouldShowRationale,
+                triggerPermissionRequest = triggerPermissionRequest,
+                showSettingsHint = showSettingsHint
+            )
+        }
+    }
+}
