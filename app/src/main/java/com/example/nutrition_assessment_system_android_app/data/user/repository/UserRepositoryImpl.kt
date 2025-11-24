@@ -131,4 +131,15 @@ class UserRepositoryImpl @Inject constructor(
     override fun observeAuthState(): Flow<Boolean> {
         return firebaseAuthHelper.observeAuthState()
     }
+
+    override suspend fun updateUserProfile(
+        gender: String,
+        age: Int,
+        height: Int,
+        weight: Float,
+        activityLevel: String,
+        goal: String
+    ): Resource<User> {
+        TODO("Not yet implemented")
+    }
 }
