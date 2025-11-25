@@ -28,7 +28,7 @@ interface UserRepository {
     suspend fun updateUserProfile(
         gender: String,
         age: Int,
-        height: Int,
+        height: Float,
         weight: Float,
         activityLevel: String,
         goal: String

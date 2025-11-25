@@ -9,16 +9,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.NumberPicker
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingHeader
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingProgressIndicator
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
 fun AgeInputScreen(
     viewModel: OnBoardingViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,14 +37,14 @@ fun AgeInputScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TextButton(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateBack) },
+                        onClick = { navController.navigate("onboarding/gender") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Quay lại")
                     }
 
                     Button(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateNext) },
+                        onClick = { navController.navigate("onboarding/height") },
                         enabled = uiState.isAgeValid,
                         modifier = Modifier.weight(1f)
                     ) {
@@ -63,8 +64,8 @@ fun AgeInputScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OnboardingProgressIndicator(
-                currentStep = OnBoardingStep.AGE.ordinal,
-                totalSteps = OnBoardingStep.entries.size
+                currentStep = 2,
+                totalSteps = 6
             )
 
             OnboardingHeader(

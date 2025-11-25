@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.nutrition_assessment_system_android_app.ui.common.component.screen.SplashScreen
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.navigation.homeNavGraph
+import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.navigation.onboardingNavGraph
 
 @Composable
 fun AppNavHost(
@@ -42,5 +43,7 @@ fun AppNavHost(
         authNavGraph(navController)
 
         homeNavGraph(navController)
+
+        onboardingNavGraph(navController)
     }
 }

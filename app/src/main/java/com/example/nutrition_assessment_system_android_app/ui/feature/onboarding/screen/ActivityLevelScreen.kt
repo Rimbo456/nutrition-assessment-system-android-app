@@ -8,18 +8,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Activity
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingHeader
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingProgressIndicator
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.SelectionCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
 fun ActivityLevelScreen(
     viewModel: OnBoardingViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -37,14 +38,14 @@ fun ActivityLevelScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TextButton(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateBack) },
+                        onClick = { navController.navigate("onboarding/weight") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Quay lại")
                     }
 
                     Button(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateNext) },
+                        onClick = { navController.navigate("onboarding/goal") },
                         enabled = uiState.isActivityLevelValid,
                         modifier = Modifier.weight(1f)
                     ) {
@@ -63,8 +64,8 @@ fun ActivityLevelScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             OnboardingProgressIndicator(
-                currentStep = OnBoardingStep.ACTIVITY.ordinal,
-                totalSteps = OnBoardingStep.entries.size
+                currentStep = 5,
+                totalSteps = 6
             )
 
             OnboardingHeader(

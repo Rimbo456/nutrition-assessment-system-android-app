@@ -8,18 +8,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.UserRound
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingHeader
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingProgressIndicator
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.SelectionCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
 fun GenderSelectionScreen(
     viewModel: OnBoardingViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,15 +37,12 @@ fun GenderSelectionScreen(
                         .padding(24.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    TextButton(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateBack) },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Quay lại")
-                    }
+                    Box(
+                        modifier = Modifier.weight(1f),
+                    )
 
                     Button(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateNext) },
+                        onClick = { navController.navigate("onboarding/age") },
                         enabled = uiState.isGenderValid,
                         modifier = Modifier.weight(1f)
                     ) {
@@ -63,8 +61,8 @@ fun GenderSelectionScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             OnboardingProgressIndicator(
-                currentStep = OnBoardingStep.GENDER.ordinal,
-                totalSteps = OnBoardingStep.entries.size
+                currentStep = 1,
+                totalSteps = 6
             )
 
             OnboardingHeader(

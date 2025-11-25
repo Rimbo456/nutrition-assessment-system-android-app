@@ -2,7 +2,6 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.onboardin
 
 import androidx.lifecycle.viewModelScope
 import com.example.nutrition_assessment_system_android_app.ui.common.component.viewmodel.BaseViewModel
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,8 +27,6 @@ class OnBoardingViewModel @Inject constructor(
                 is OnBoardingIntent.SetWeight -> handleSetWeight(intent.weight)
                 is OnBoardingIntent.SetActivityLevel -> handleSetActivityLevel(intent.activityLevel)
                 is OnBoardingIntent.SetGoal -> handleSetGoal(intent.goal)
-                is OnBoardingIntent.NavigateBack -> handleNavigateBack()
-                is OnBoardingIntent.NavigateNext -> handleNavigateNext()
             }
         }
     }
@@ -105,26 +102,6 @@ class OnBoardingViewModel @Inject constructor(
                 goal = goal,
                 isGoalValid = isValid,
                 errorMessage = if (!isValid) "Mục tiêu không hợp lệ" else null
-            )
-        }
-    }
-
-    private fun handleNavigateBack() {
-        val newStep = viewModelState.value.currentStep.previous()
-        viewModelState.update {
-            it.copy(
-                currentStep = newStep,
-                errorMessage = null
-            )
-        }
-    }
-
-    private fun handleNavigateNext() {
-        val newStep = viewModelState.value.currentStep.next()
-        viewModelState.update {
-            it.copy(
-                currentStep = newStep,
-                errorMessage = null
             )
         }
     }

@@ -1,24 +1,43 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.screen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.composables.icons.lucide.*
+import androidx.navigation.NavController
+import com.composables.icons.lucide.Dumbbell
+import com.composables.icons.lucide.Equal
+import com.composables.icons.lucide.Heart
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.TrendingDown
+import com.composables.icons.lucide.TrendingUp
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingHeader
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingProgressIndicator
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.SelectionCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
 fun GoalSelectionScreen(
     viewModel: OnBoardingViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,7 +55,7 @@ fun GoalSelectionScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TextButton(
-                        onClick = { viewModel.onTriggerIntent(OnBoardingIntent.NavigateBack) },
+                        onClick = { navController.navigate("onboarding/activity") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Quay lại")
@@ -64,8 +83,8 @@ fun GoalSelectionScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             OnboardingProgressIndicator(
-                currentStep = OnBoardingStep.GOAL.ordinal,
-                totalSteps = OnBoardingStep.entries.size
+                currentStep = 6,
+                totalSteps = 6
             )
 
             OnboardingHeader(

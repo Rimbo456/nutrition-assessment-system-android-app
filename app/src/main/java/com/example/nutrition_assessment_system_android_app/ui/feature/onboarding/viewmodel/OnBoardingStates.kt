@@ -1,8 +1,8 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel
 
+import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.OneTimeEvent
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewModelState
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewState
-import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.enums.OnBoardingStep
 
 /**
  * Onboarding states following MVI pattern
@@ -11,9 +11,6 @@ class OnBoardingStates {
     data class OnBoardingViewState(
         val isLoading: Boolean = false,
         val errorMessage: String? = null,
-
-        // Current step in onboarding flow
-        val currentStep: OnBoardingStep = OnBoardingStep.GENDER,
 
         // User data
         val gender: String? = null,
@@ -36,9 +33,6 @@ class OnBoardingStates {
         val isLoading: Boolean = false,
         val errorMessage: String? = null,
 
-        // Current step in onboarding flow
-        val currentStep: OnBoardingStep = OnBoardingStep.GENDER,
-
         // User data
         val gender: String? = null,
         val age: Int? = null,
@@ -59,7 +53,6 @@ class OnBoardingStates {
             return OnBoardingViewState(
                 isLoading = isLoading,
                 errorMessage = errorMessage,
-                currentStep = currentStep,
                 gender = gender,
                 age = age,
                 height = height,
