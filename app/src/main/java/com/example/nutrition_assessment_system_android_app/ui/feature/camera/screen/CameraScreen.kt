@@ -1,69 +1,34 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.camera.screen
 
 import androidx.camera.core.Camera
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.border
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.composables.icons.lucide.*
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.common.component.button.CustomIconButton
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CameraPermissionWrapper
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CameraPreview
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.Corner
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.FocusCornerIndicator
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel.CameraViewModel
-import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-
-@Composable
-private fun ReticleCorner(
-    modifier: Modifier,
-    color: Color,
-    size: Dp = 50.dp,
-    stroke: Dp = 4.dp,
-    topLeft: Boolean = false,
-    topRight: Boolean = false,
-    bottomLeft: Boolean = false,
-    bottomRight: Boolean = false
-) {
-    Canvas(modifier = modifier.size(size)) {
-        val s = size.toPx()
-        val l = s * 0.6f
-        val strokeWidth = stroke.toPx()
-        // Draw L shape with rounded corners
-        drawPath(androidx.compose.ui.graphics.Path().apply {
-            if (topLeft) {
-                moveTo(0f, l); lineTo(0f, 0f); lineTo(l, 0f)
-            } else if (topRight) {
-                moveTo(s-l, 0f); lineTo(s, 0f); lineTo(s, l)
-            } else if (bottomLeft) {
-                moveTo(0f, s-l); lineTo(0f, s); lineTo(l, s)
-            } else if (bottomRight) {
-                moveTo(s-l, s); lineTo(s, s); lineTo(s, s-l)
-            }
-        }, color = color, style = Stroke(width = strokeWidth, cap = StrokeCap.Round))
-    }
-}
 
 @Composable
 fun CameraScreen(
@@ -75,117 +40,181 @@ fun CameraScreen(
     var camera by remember { mutableStateOf<Camera?>(null) }
     var torchEnabled by remember { mutableStateOf(false) }
 
-    val accent = Color(0xFFB7FF3B) // green accent from mockup
-    val accentGlow = Color(0xFF9FE629) // slightly darker for depth
-    val bgFadeTop = Brush.verticalGradient(
-        colors = listOf(
-            Color.Black.copy(alpha = 0.6f),
-            Color.Transparent
-        ),
-        startY = 0f,
-        endY = 300f
-    )
-    val bgFadeBottom = Brush.verticalGradient(
-        colors = listOf(
-            Color.Transparent,
-            Color.Black.copy(alpha = 0.7f)
-        )
-    )
-
     CameraPermissionWrapper(
         content = {
-            CameraPreview(onCameraReady = { camera = it })
-
             Box(modifier = Modifier.fillMaxSize()) {
-                // Top gradient overlay for better button visibility
+                CameraPreview(onCameraReady = { camera = it })
+
+                // Top gradient overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .align(Alignment.TopCenter)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Black.copy(alpha = 0.7f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+
+                // Bottom gradient overlay
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
-                        .align(Alignment.TopCenter)
-                        .background(bgFadeTop)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = 0.8f)
+                                )
+                            )
+                        )
                 )
 
-                // Reticle corners with better positioning
-                ReticleCorner(modifier = Modifier.align(Alignment.TopStart).padding(40.dp), color = accent, topLeft = true)
-                ReticleCorner(modifier = Modifier.align(Alignment.TopEnd).padding(40.dp), color = accent, topRight = true)
-                ReticleCorner(modifier = Modifier.align(Alignment.BottomStart).padding(40.dp), color = accent, bottomLeft = true)
-                ReticleCorner(modifier = Modifier.align(Alignment.BottomEnd).padding(40.dp), color = accent, bottomRight = true)
-
-                // Top buttons row
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 20.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 28.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
+                Column(modifier = Modifier.fillMaxSize()) {
+                    // Top bar
+                    Row(
                         modifier = Modifier
-                            .size(52.dp)
-                            .shadow(8.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.92f))
-                            .border(1.dp, Color.White.copy(alpha = 0.3f), CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CustomIconButton(icon = Lucide.X, onClick = onClose, iconColors = Color.Black, sizeIcon = 24.dp)
-                    }
-                    Box(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .shadow(8.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(if (torchEnabled) accent.copy(alpha = 0.95f) else Color.White.copy(alpha = 0.92f))
-                            .border(1.dp, if (torchEnabled) accent else Color.White.copy(alpha = 0.3f), CircleShape),
-                        contentAlignment = Alignment.Center
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         CustomIconButton(
-                            icon = if (torchEnabled) Lucide.FlashlightOff else Lucide.Flashlight,
-                            onClick = {
-                                torchEnabled = !torchEnabled
-                                camera?.cameraControl?.enableTorch(torchEnabled)
-                            },
+                            onClick = onClose,
+                            icon = Lucide.X,
+                            contentDescription = null,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = Color.White.copy(alpha = 0.95f)
+                            ),
                             iconColors = Color.Black,
-                            sizeIcon = 24.dp
+                            sizeIcon = 20.dp,
+                            modifier = Modifier
+                                .size(44.dp)
+                                .shadow(8.dp, CircleShape)
                         )
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CustomIconButton(
+                                onClick = {
+                                    torchEnabled = !torchEnabled
+                                    camera?.cameraControl?.enableTorch(torchEnabled)
+                                },
+                                icon = if (torchEnabled) Lucide.FlashlightOff else Lucide.Flashlight,
+                                contentDescription = null,
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = if (torchEnabled)
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.95f)
+                                    else
+                                        Color.White.copy(alpha = 0.95f)
+                                ),
+                                iconColors = if (torchEnabled)
+                                    MaterialTheme.colorScheme.onPrimary
+                                else
+                                    Color.Black,
+                                sizeIcon = 20.dp,
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .shadow(8.dp, CircleShape)
+                            )
+
+                            CustomIconButton(
+                                onClick = onMore,
+                                icon = Lucide.EllipsisVertical,
+                                contentDescription = null,
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = Color.White.copy(alpha = 0.95f)
+                                ),
+                                iconColors = Color.Black,
+                                sizeIcon = 20.dp,
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .shadow(8.dp, CircleShape)
+                            )
+                        }
                     }
+
+                    // Center focus frame
                     Box(
                         modifier = Modifier
-                            .size(52.dp)
-                            .shadow(8.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.92f))
-                            .border(1.dp, Color.White.copy(alpha = 0.3f), CircleShape),
+                            .weight(1f)
+                            .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CustomIconButton(icon = Lucide.EllipsisVertical, onClick = onMore, iconColors = Color.Black, sizeIcon = 24.dp)
-                    }
-                }
+                        // Animated corner indicators
+                        val infiniteTransition = rememberInfiniteTransition(label = "corner_blink")
+                        val alpha by infiniteTransition.animateFloat(
+                            initialValue = 0.3f,
+                            targetValue = 1f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1000, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "alpha_animation"
+                        )
 
-                // Bottom bar with improved design
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .background(bgFadeBottom)
-                        .padding(horizontal = 28.dp, vertical = 32.dp)
-                ) {
+                        Box(modifier = Modifier.size(width = 300.dp, height = 450.dp)) {
+                            // Corner indicators với nét vẽ tròn hoàn toàn
+                            FocusCornerIndicator(
+                                modifier = Modifier.align(Alignment.TopStart),
+                                color = MaterialTheme.colorScheme.primary,
+                                alpha = alpha,
+                                size = 40.dp,
+                                strokeWidth = 4.dp,
+                                corner = Corner.TopRight
+                            )
+
+                            FocusCornerIndicator(
+                                modifier = Modifier.align(Alignment.TopEnd),
+                                color = MaterialTheme.colorScheme.primary,
+                                alpha = alpha,
+                                size = 40.dp,
+                                strokeWidth = 4.dp,
+                                corner = Corner.TopLeft
+                            )
+
+                            FocusCornerIndicator(
+                                modifier = Modifier.align(Alignment.BottomStart),
+                                color = MaterialTheme.colorScheme.primary,
+                                alpha = alpha,
+                                size = 40.dp,
+                                strokeWidth = 4.dp,
+                                corner = Corner.BottomRight
+                            )
+
+                            FocusCornerIndicator(
+                                modifier = Modifier.align(Alignment.BottomEnd),
+                                color = MaterialTheme.colorScheme.primary,
+                                alpha = alpha,
+                                size = 40.dp,
+                                strokeWidth = 4.dp,
+                                corner = Corner.BottomLeft
+                            )
+                        }
+                    }
+
+                    // Bottom bar
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 32.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Thumbnail with better styling
+                        // Thumbnail
                         Box(
                             modifier = Modifier
-                                .size(68.dp)
-                                .shadow(6.dp, CircleShape)
+                                .size(64.dp)
+                                .shadow(12.dp, CircleShape)
                                 .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.2f))
-                                .border(2.dp, Color.White.copy(alpha = 0.3f), CircleShape)
+                                .border(3.dp, Color.White.copy(alpha = 0.3f), CircleShape)
                                 .clickable { onThumbnailClick() }
                         ) {
                             Image(
@@ -196,46 +225,28 @@ fun CameraScreen(
                             )
                         }
 
-                        // Capture button with glow effect
+                        // Capture button
                         Box(
                             modifier = Modifier
-                                .size(84.dp)
-                                .shadow(12.dp, CircleShape, spotColor = accent.copy(alpha = 0.5f))
-                                .clip(CircleShape)
-                                .background(
-                                    Brush.radialGradient(
-                                        colors = listOf(accent, accentGlow),
-                                        radius = 200f
-                                    )
-                                )
-                                .border(3.dp, Color.White.copy(alpha = 0.4f), CircleShape),
-                            contentAlignment = Alignment.Center
+                                .size(80.dp)
+                                .shadow(16.dp, CircleShape)
                         ) {
                             CustomIconButton(
-                                icon = Lucide.Search,
-                                onClick = { /* capture */ },
-                                iconColors = Color.Black.copy(alpha = 0.85f),
-                                sizeIcon = 36.dp
+                                icon = Lucide.Camera,
+                                onClick = { /* TODO */ },
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary
+                                ),
+                                iconColors = MaterialTheme.colorScheme.onPrimary,
+                                sizeIcon = 32.dp,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .border(4.dp, Color.White.copy(alpha = 0.3f), CircleShape)
                             )
                         }
 
-                        // Info button with better styling
-                        Box(
-                            modifier = Modifier
-                                .size(68.dp)
-                                .shadow(6.dp, CircleShape)
-                                .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.95f))
-                                .border(2.dp, Color.White.copy(alpha = 0.3f), CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CustomIconButton(
-                                icon = Lucide.CircleHelp,
-                                onClick = { /* info */ },
-                                iconColors = Color.Black,
-                                sizeIcon = 28.dp
-                            )
-                        }
+                        // Spacer to balance layout
+                        Box(modifier = Modifier.size(64.dp))
                     }
                 }
             }
@@ -243,5 +254,3 @@ fun CameraScreen(
     )
 }
 
-@Composable
-fun CameraScreenPreview() { }
