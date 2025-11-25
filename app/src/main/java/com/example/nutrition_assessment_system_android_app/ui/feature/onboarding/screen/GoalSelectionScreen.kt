@@ -63,7 +63,7 @@ fun GoalSelectionScreen(
 
                     Button(
                         onClick = {
-                            //TODO
+                            viewModel.onTriggerIntent(OnBoardingIntent.SubmitOnboardingData)
                         },
                         enabled = uiState.isGoalValid,
                         modifier = Modifier.weight(1f)

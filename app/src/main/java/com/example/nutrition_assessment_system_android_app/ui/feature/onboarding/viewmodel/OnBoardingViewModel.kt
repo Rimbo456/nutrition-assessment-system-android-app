@@ -1,6 +1,8 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.example.nutrition_assessment_system_android_app.domain.params.UpdateUserProfileParams
+import com.example.nutrition_assessment_system_android_app.domain.usecase.user.UpdateProfileUserUseCase
 import com.example.nutrition_assessment_system_android_app.ui.common.component.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -13,8 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
-    // TODO: Inject use cases here when domain layer is ready
-    // private val saveOnboardingDataUseCase: SaveOnboardingDataUseCase
+    private val updateProfileUserUseCase: UpdateProfileUserUseCase
 ) : BaseViewModel<OnBoardingIntent, OnBoardingStates.OnBoardingViewState, OnBoardingStates.OnBoardingViewModelState>(
     initState = OnBoardingStates.OnBoardingViewModelState()
 ) {
@@ -27,6 +28,7 @@ class OnBoardingViewModel @Inject constructor(
                 is OnBoardingIntent.SetWeight -> handleSetWeight(intent.weight)
                 is OnBoardingIntent.SetActivityLevel -> handleSetActivityLevel(intent.activityLevel)
                 is OnBoardingIntent.SetGoal -> handleSetGoal(intent.goal)
+                is OnBoardingIntent.SubmitOnboardingData -> handleCompleteOnBoarding()
             }
         }
     }
@@ -123,38 +125,34 @@ class OnBoardingViewModel @Inject constructor(
 
         viewModelState.update { it.copy(isLoading = true, errorMessage = null) }
 
-        // TODO: Save onboarding data to domain layer
-        // viewModelScope.launch {
-        //     saveOnboardingDataUseCase(
-        //         OnboardingData(
-        //             gender = current.gender!!,
-        //             age = current.age!!,
-        //             height = current.height!!,
-        //             weight = current.weight!!,
-        //             activityLevel = current.activityLevel!!,
-        //             goal = current.goal!!
-        //         )
-        //     ).collect { result ->
-        //         result.reduce(
-        //             onSuccess = {
-        //                 viewModelState.update {
-        //                     it.copy(
-        //                         isLoading = false,
-        //                         isOnBoardingComplete = true
-        //                     )
-        //                 }
-        //             },
-        //             onError = { message, _ ->
-        //                 viewModelState.update {
-        //                     it.copy(isLoading = false, errorMessage = message)
-        //                 }
-        //             },
-        //             onLoading = {
-        //                 viewModelState.update { it.copy(isLoading = true) }
-        //             }
-        //         )
-        //     }
-        // }
+        viewModelScope.launch {
+            updateProfileUserUseCase.execute(
+                param = UpdateUserProfileParams(
+                    gender = current.gender!!,
+                    age = current.age!!,
+                    height = current.height!!,
+                    weight = current.weight!!,
+                    activityLevel = current.activityLevel!!,
+                    goal = current.goal!!
+                )
+            ).reduce(
+                onSuccess = {
+                    viewModelState.update {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                },
+                onError = { message, _ ->
+                    viewModelState.update {
+                        it.copy(isLoading = false, errorMessage = message)
+                    }
+                },
+                onLoading = {
+                    viewModelState.update { it.copy(isLoading = true) }
+                }
+            )
+        }
 
         // Temporary: Mark as complete without domain call
         viewModelState.update {

@@ -136,7 +136,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUserProfile(
         gender: String,
         age: Int,
-        height: Float,
+        height: Int,
         weight: Float,
         activityLevel: String,
         goal: String
