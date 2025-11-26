@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.camera.screen
 
+import android.util.Log
 import androidx.camera.core.Camera
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -18,9 +19,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.icons.lucide.*
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.common.component.button.CustomIconButton
@@ -28,6 +31,7 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.camera.com
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CameraPreview
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.Corner
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.FocusCornerIndicator
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel.CameraIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel.CameraViewModel
 
 @Composable
@@ -37,13 +41,27 @@ fun CameraScreen(
     onMore: () -> Unit = {},
     onThumbnailClick: () -> Unit = {},
 ) {
-    var camera by remember { mutableStateOf<Camera?>(null) }
+    val context = LocalContext.current
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var cameraState by remember { mutableStateOf<Camera?>(null) }
     var torchEnabled by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState) {
+        Log.d("CameraScreen", "dish: ${uiState.dish}")
+        Log.d("CameraScreen", "error: ${uiState.errorMessage}")
+    }
 
     CameraPermissionWrapper(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
-                CameraPreview(onCameraReady = { camera = it })
+                CameraPreview(
+                    onCameraReady = { camera, capture ->
+                        cameraState = camera
+                        viewModel.onTriggerIntent(CameraIntent.SetImageCapture(capture))
+                    }
+                )
 
                 // Top gradient overlay
                 Box(
@@ -105,7 +123,7 @@ fun CameraScreen(
                             CustomIconButton(
                                 onClick = {
                                     torchEnabled = !torchEnabled
-                                    camera?.cameraControl?.enableTorch(torchEnabled)
+                                    cameraState?.cameraControl?.enableTorch(torchEnabled)
                                 },
                                 icon = if (torchEnabled) Lucide.FlashlightOff else Lucide.Flashlight,
                                 contentDescription = null,
@@ -233,7 +251,9 @@ fun CameraScreen(
                         ) {
                             CustomIconButton(
                                 icon = Lucide.Camera,
-                                onClick = { /* TODO */ },
+                                onClick = {
+                                    viewModel.onTriggerIntent(CameraIntent.TakePhoto(context))
+                                },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primary
                                 ),

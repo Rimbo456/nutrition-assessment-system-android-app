@@ -17,12 +17,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.util.concurrent.TimeUnit
 import androidx.camera.core.FocusMeteringAction
+import androidx.camera.core.ImageCapture
 import kotlin.math.abs
 
 @Composable
 fun CameraPreview(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onCameraReady: (Camera) -> Unit = { }
+    onCameraReady: (Camera, ImageCapture) -> Unit = { _, _ -> }
 ) {
     AndroidView(
         modifier = Modifier
@@ -31,6 +32,10 @@ fun CameraPreview(
         factory = { context ->
             val previewView = PreviewView(context)
             val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+
+            val imageCapture = ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .build()
 
             var camera: Camera? = null
             var baseZoom = 1f
@@ -96,9 +101,10 @@ fun CameraPreview(
                     camera = cameraProvider.bindToLifecycle(
                         lifecycleOwner,
                         cameraSelector,
-                        preview
+                        preview,
+                        imageCapture
                     )
-                    camera.let { onCameraReady(it) }
+                    onCameraReady(camera, imageCapture)
                 } catch (exc: Exception) {
                     exc.printStackTrace()
                 }
