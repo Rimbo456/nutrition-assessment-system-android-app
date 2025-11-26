@@ -34,6 +34,7 @@ class CameraViewModel @Inject constructor(
                 is CameraIntent.OpenAppSettings -> {
                     viewModelState.update { it.copy(showSettingsHint = true) }
                 }
+                is CameraIntent.TakePhoto -> {}
             }
         }
     }

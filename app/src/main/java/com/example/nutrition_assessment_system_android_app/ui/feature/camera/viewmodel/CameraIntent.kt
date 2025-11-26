@@ -7,4 +7,5 @@ sealed interface CameraIntent : ViewIntent {
     data class ObservePermission(val isGranted: Boolean, val shouldShowRationale: Boolean) : CameraIntent
     object PermissionRequestConsumed : CameraIntent
     object OpenAppSettings : CameraIntent
+    object TakePhoto: CameraIntent
 }
