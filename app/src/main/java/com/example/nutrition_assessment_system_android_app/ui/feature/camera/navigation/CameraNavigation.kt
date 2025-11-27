@@ -7,6 +7,8 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.camera.scr
 
 fun NavGraphBuilder.cameraNavGraph(navController: NavHostController) {
     composable("camera") { backStackEntry ->
-        CameraScreen()
+        CameraScreen(
+            onClose = { navController.popBackStack() }
+        )
     }
 }

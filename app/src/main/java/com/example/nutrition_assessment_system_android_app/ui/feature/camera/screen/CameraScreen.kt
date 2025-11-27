@@ -2,15 +2,19 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.camera.sc
 
 import android.util.Log
 import androidx.camera.core.Camera
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,16 +28,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.composables.icons.lucide.*
 import com.example.nutrition_assessment_system_android_app.R
 import com.example.nutrition_assessment_system_android_app.ui.common.component.button.CustomIconButton
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.BottomSheetContent
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CameraPermissionWrapper
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CameraPreview
-import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.Corner
-import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.FocusCornerIndicator
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.component.CenterFocusFrame
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel.CameraIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.viewmodel.CameraViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(
     viewModel: CameraViewModel = hiltViewModel(),
@@ -47,10 +53,19 @@ fun CameraScreen(
 
     var cameraState by remember { mutableStateOf<Camera?>(null) }
     var torchEnabled by remember { mutableStateOf(false) }
+    var showSheet by remember { mutableStateOf(false) }
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     LaunchedEffect(uiState) {
         Log.d("CameraScreen", "dish: ${uiState.dish}")
         Log.d("CameraScreen", "error: ${uiState.errorMessage}")
+        Log.d("CameraScreen", "loading: ${uiState.isLoading}")
+        if (uiState.dish != null) {
+            showSheet = true
+        }
     }
 
     CameraPermissionWrapper(
@@ -160,63 +175,11 @@ fun CameraScreen(
                     }
 
                     // Center focus frame
-                    Box(
+                    CenterFocusFrame(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // Animated corner indicators
-                        val infiniteTransition = rememberInfiniteTransition(label = "corner_blink")
-                        val alpha by infiniteTransition.animateFloat(
-                            initialValue = 0.3f,
-                            targetValue = 1f,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(1000, easing = FastOutSlowInEasing),
-                                repeatMode = RepeatMode.Reverse
-                            ),
-                            label = "alpha_animation"
-                        )
-
-                        Box(modifier = Modifier.size(width = 300.dp, height = 450.dp)) {
-                            // Corner indicators với nét vẽ tròn hoàn toàn
-                            FocusCornerIndicator(
-                                modifier = Modifier.align(Alignment.TopStart),
-                                color = MaterialTheme.colorScheme.primary,
-                                alpha = alpha,
-                                size = 40.dp,
-                                strokeWidth = 4.dp,
-                                corner = Corner.TopRight
-                            )
-
-                            FocusCornerIndicator(
-                                modifier = Modifier.align(Alignment.TopEnd),
-                                color = MaterialTheme.colorScheme.primary,
-                                alpha = alpha,
-                                size = 40.dp,
-                                strokeWidth = 4.dp,
-                                corner = Corner.TopLeft
-                            )
-
-                            FocusCornerIndicator(
-                                modifier = Modifier.align(Alignment.BottomStart),
-                                color = MaterialTheme.colorScheme.primary,
-                                alpha = alpha,
-                                size = 40.dp,
-                                strokeWidth = 4.dp,
-                                corner = Corner.BottomRight
-                            )
-
-                            FocusCornerIndicator(
-                                modifier = Modifier.align(Alignment.BottomEnd),
-                                color = MaterialTheme.colorScheme.primary,
-                                alpha = alpha,
-                                size = 40.dp,
-                                strokeWidth = 4.dp,
-                                corner = Corner.BottomLeft
-                            )
-                        }
-                    }
+                            .fillMaxWidth()
+                    )
 
                     // Bottom bar
                     Row(
@@ -272,5 +235,44 @@ fun CameraScreen(
             }
         }
     )
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+    if (showSheet) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                showSheet = false
+                viewModel.onTriggerIntent(CameraIntent.ClearDish)
+            }
+        ) {
+            BottomSheetContent(
+                dish = uiState.dish,
+                isEditing = uiState.isEditing,
+                onEditToggle = { viewModel.onTriggerIntent(CameraIntent.OnToggleEditing) },
+                onWeightChange = { weight ->
+                    viewModel.onTriggerIntent(CameraIntent.OnWeightChanged(weight))
+                },
+                onIngredientWeightChange = { ingredientId, weight ->
+                    viewModel.onTriggerIntent(
+                        CameraIntent.OnIngredientWeightChanged(
+                            ingredientId,
+                            weight
+                        )
+                    )
+                },
+                onIngredientRemove = { ingredientId ->
+                    viewModel.onTriggerIntent(CameraIntent.OnIngredientRemoved(ingredientId))
+                }
+            )
+        }
+    }
 }
 

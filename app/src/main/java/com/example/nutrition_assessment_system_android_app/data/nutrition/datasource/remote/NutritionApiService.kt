@@ -9,6 +9,6 @@ import retrofit2.http.Part
 
 interface NutritionApiService {
     @Multipart
-    @POST("/api/camera/analyze")
+    @POST("/api/nutrition/analyze")
     suspend fun analyzePhoto(@Part image: MultipartBody.Part): Response<AnalyzeResponse>
 }
