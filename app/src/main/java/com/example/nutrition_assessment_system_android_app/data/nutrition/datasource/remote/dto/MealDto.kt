@@ -1,11 +1,9 @@
-package com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.local
+package com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.dto
 
-import androidx.room.Entity
 import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.common.NutritionItem
 import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.common.TotalNutrition
 
-@Entity(tableName = "meals", primaryKeys = ["id"])
-data class MealEntity(
+data class MealDto(
     val id: String,
     val userId: String,
     val dishLabel: String,

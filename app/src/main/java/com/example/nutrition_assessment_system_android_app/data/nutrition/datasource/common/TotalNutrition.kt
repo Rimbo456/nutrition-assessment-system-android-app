@@ -1,9 +1,8 @@
-package com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.response
+package com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.common
 
 import com.google.gson.annotations.SerializedName
 
-data class NutritionItem(
-    @SerializedName("weight_g") val weightG: Double,
+data class TotalNutrition(
     val calories: Double,
     @SerializedName("protein_g") val proteinG: Double,
     @SerializedName("fat_g") val fatG: Double,
