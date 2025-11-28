@@ -41,16 +41,15 @@ fun DailyIntakeCard(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(20.dp),
-                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                elevation = 12.dp,
+                shape = RoundedCornerShape(24.dp),
+                ambientColor = iconBackgroundColor.copy(alpha = 0.12f),
+                spotColor = iconBackgroundColor.copy(alpha = 0.12f)
             ),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
@@ -60,21 +59,21 @@ fun DailyIntakeCard(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.surfaceContainer,
-                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.95f)
+                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.96f)
                         )
                     )
                 )
-                .padding(20.dp),
+                .padding(24.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -82,17 +81,17 @@ fun DailyIntakeCard(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(14.dp))
                             .background(
                                 brush = Brush.linearGradient(
                                     colors = listOf(
                                         iconBackgroundColor,
-                                        iconBackgroundColor.copy(alpha = 0.8f)
+                                        iconBackgroundColor.copy(alpha = 0.75f)
                                     )
                                 )
                             )
-                            .padding(8.dp)
+                            .padding(10.dp)
                     )
                     Text(
                         text = title,
@@ -104,9 +103,9 @@ fun DailyIntakeCard(
                 }
                 Text(
                     text = percentage,
-                    style = MaterialTheme.typography.displayLarge.copy(
+                    style = MaterialTheme.typography.displayMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = iconBackgroundColor
                     )
                 )
             }

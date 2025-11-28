@@ -57,16 +57,16 @@ fun StatisticsCard(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 6.dp,
-                shape = RoundedCornerShape(16.dp),
-                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                elevation = 12.dp,
+                shape = RoundedCornerShape(20.dp),
+                ambientColor = iconBackgroundColor.copy(alpha = 0.08f),
+                spotColor = iconBackgroundColor.copy(alpha = 0.08f)
             )
             .then(
                 if (onClick != null) Modifier.clickable { onClick() }
                 else Modifier
             ),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
@@ -79,12 +79,12 @@ fun StatisticsCard(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.surfaceContainer,
-                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.98f)
+                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.97f)
                         )
                     )
                 )
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -93,24 +93,24 @@ fun StatisticsCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
-                            .size(32.dp)
-                            .clip(RoundedCornerShape(10.dp))
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(12.dp))
                             .background(
                                 brush = Brush.linearGradient(
                                     colors = listOf(
                                         iconBackgroundColor,
-                                        iconBackgroundColor.copy(alpha = 0.8f)
+                                        iconBackgroundColor.copy(alpha = 0.75f)
                                     )
                                 )
                             )
-                            .padding(6.dp)
+                            .padding(8.dp)
                     )
                     Text(
                         text = title,
@@ -124,7 +124,8 @@ fun StatisticsCard(
                     Icon(
                         imageVector = Lucide.ChevronRight,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
@@ -150,12 +151,12 @@ fun StatisticsCardItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(
-                MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f)
+                MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)
             )
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(14.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -172,6 +173,7 @@ fun StatisticsCardItem(
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
