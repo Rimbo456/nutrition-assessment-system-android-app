@@ -9,9 +9,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.nutrition_assessment_system_android_app.ui.common.component.bar.BottomTabBar
-import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DailyIntakeCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.screen.OverviewScreen
+import com.example.nutrition_assessment_system_android_app.ui.feature.chat.screen.PreChatScreen
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
     val scope = rememberCoroutineScope()
@@ -50,7 +49,11 @@ fun HomeScreen(
                     // Second tab content
                 }
                 2 -> {
-                    // Third tab content
+                    PreChatScreen(
+                        onStartChat = { sessionId ->
+                            navController.navigate("chat")
+                        }
+                    )
                 }
             }
         }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nutrition_assessment_system_android_app.ui.common.component.screen.SplashScreen
 import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navigation.authNavGraph
+import com.example.nutrition_assessment_system_android_app.ui.feature.chat.navigation.chatNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.navigation.cameraNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.navigation.homeNavGraph
 
@@ -43,6 +44,8 @@ fun AppNavHost(
         authNavGraph(navController)
 
         homeNavGraph(navController)
+
+        chatNavGraph(navController)
 
         cameraNavGraph(navController)
     }
