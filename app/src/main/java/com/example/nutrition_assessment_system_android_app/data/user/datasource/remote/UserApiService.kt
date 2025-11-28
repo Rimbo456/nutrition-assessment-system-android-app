@@ -3,10 +3,15 @@ package com.example.nutrition_assessment_system_android_app.data.user.datasource
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.dto.UserDto
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.LoginRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.RegisterRequest
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.GetProfileResponse
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.UpdateUserProfileRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.LoginResponse
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.RegisterResponse
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.UpdateUserProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.PATCH
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserApiService {
@@ -15,4 +20,10 @@ interface UserApiService {
 
     @POST("/api/auth/login")
     suspend fun loginUser(@Body request: LoginRequest): Response<LoginResponse>
+
+    @GET("/api/user/profile")
+    suspend fun getCurrentUser(): Response<GetProfileResponse>
+
+    @PATCH("/api/user/profile")
+    suspend fun updateUserProfile(@Body request: UpdateUserProfileRequest): Response<UpdateUserProfileResponse>
 }

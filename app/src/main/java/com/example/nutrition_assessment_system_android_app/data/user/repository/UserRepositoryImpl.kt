@@ -6,6 +6,7 @@ import com.example.nutrition_assessment_system_android_app.data.common.util.ApiH
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.LoginRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.RegisterRequest
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.UpdateUserProfileRequest
 import com.example.nutrition_assessment_system_android_app.data.user.mapper.toUser
 import com.example.nutrition_assessment_system_android_app.domain.model.User
 import com.example.nutrition_assessment_system_android_app.domain.repository.PreferencesRepository
@@ -130,5 +131,43 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun observeAuthState(): Flow<Boolean> {
         return firebaseAuthHelper.observeAuthState()
+    }
+
+    override suspend fun getCurrentUser(): Resource<User> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                userApiService.getCurrentUser()
+            },
+            transform = { response ->
+                response.data.toUser()
+            }
+        )
+    }
+
+    override suspend fun updateUserProfile(
+        gender: String,
+        age: Int,
+        height: Int,
+        weight: Float,
+        activityLevel: String,
+        goal: String
+    ): Resource<User> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                userApiService.updateUserProfile(
+                    request = UpdateUserProfileRequest(
+                        gender = gender,
+                        age = age,
+                        weight = weight,
+                        height = height,
+                        activityLevel = activityLevel,
+                        goal = goal
+                    )
+                )
+            },
+            transform = { response ->
+                response.data.toUser()
+            }
+        )
     }
 }

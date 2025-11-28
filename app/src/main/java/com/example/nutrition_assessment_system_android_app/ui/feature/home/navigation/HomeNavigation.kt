@@ -9,7 +9,12 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable("home") { backStackEntry ->
         HomeScreen(
             //viewModel = hiltViewModel(backStackEntry)
-            navController = navController
+            navController = navController,
+            navigateToOnBoarding = {
+                navController.navigate("onboarding") {
+                    popUpTo("home") { inclusive = true }
+                }
+            }
         )
     }
 }

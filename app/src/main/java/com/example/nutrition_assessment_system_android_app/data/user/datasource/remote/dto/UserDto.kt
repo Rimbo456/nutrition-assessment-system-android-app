@@ -10,7 +10,7 @@ data class UserDto (
     val gender: String? = null,
     val age: Int? = null,
     val weight: Float? = null,
-    val height: Float? = null,
+    val height: Int? = null,
     val activityLevel: String? = null,
     val goal: String? = null,
     val preferences: PreferencesDto? = null,

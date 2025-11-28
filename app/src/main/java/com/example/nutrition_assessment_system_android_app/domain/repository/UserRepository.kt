@@ -24,4 +24,15 @@ interface UserRepository {
 
     suspend fun checkAuthStatus(): Resource<Boolean>
     fun observeAuthState(): Flow<Boolean>
+
+    suspend fun getCurrentUser(): Resource<User>
+
+    suspend fun updateUserProfile(
+        gender: String,
+        age: Int,
+        height: Int,
+        weight: Float,
+        activityLevel: String,
+        goal: String
+    ): Resource<User>
 }

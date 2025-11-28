@@ -13,7 +13,7 @@ data class UserEntity(
     val gender: String?,
     val age: Int?,
     val weight: Float?,
-    val height: Float?,
+    val height: Int?,
     val activityLevel: String?,
     val goal: String?,
     val preferences: PreferencesDto?,
