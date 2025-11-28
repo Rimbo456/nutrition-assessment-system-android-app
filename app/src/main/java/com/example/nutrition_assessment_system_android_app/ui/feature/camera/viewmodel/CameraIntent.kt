@@ -17,4 +17,5 @@ sealed interface CameraIntent : ViewIntent {
     data class OnWeightChanged(val weight: Double) : CameraIntent
     data class OnIngredientWeightChanged(val ingredientId: String, val weight: Double) : CameraIntent
     data class OnIngredientRemoved(val ingredientId: String) : CameraIntent
+    object SaveMeal : CameraIntent
 }

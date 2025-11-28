@@ -270,6 +270,11 @@ fun CameraScreen(
                 },
                 onIngredientRemove = { ingredientId ->
                     viewModel.onTriggerIntent(CameraIntent.OnIngredientRemoved(ingredientId))
+                },
+                onIngredientAdd = { TODO() },
+                onSave = {
+                    viewModel.onTriggerIntent(CameraIntent.SaveMeal)
+                    showSheet = false
                 }
             )
         }

@@ -9,7 +9,7 @@ data class MealEntity(
     val id: String,
     val userId: String,
     val dishLabel: String,
-    val servingSize: Float,
+    val servingSize: Double,
     val components: Map<String, NutritionItem>,
     val totalNutrition: TotalNutrition,
     val date: String,

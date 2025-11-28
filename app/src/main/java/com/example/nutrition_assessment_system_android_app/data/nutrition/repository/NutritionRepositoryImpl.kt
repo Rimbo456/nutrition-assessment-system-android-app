@@ -2,8 +2,13 @@ package com.example.nutrition_assessment_system_android_app.data.nutrition.repos
 
 import com.example.nutrition_assessment_system_android_app.data.common.util.ApiHelper
 import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.NutritionApiService
+import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.request.SaveMealRequest
+import com.example.nutrition_assessment_system_android_app.data.nutrition.mapper.toDishData
 import com.example.nutrition_assessment_system_android_app.data.nutrition.mapper.toDomain
 import com.example.nutrition_assessment_system_android_app.domain.model.Dish
+import com.example.nutrition_assessment_system_android_app.domain.model.Meal
+import com.example.nutrition_assessment_system_android_app.domain.model.NutritionItem
+import com.example.nutrition_assessment_system_android_app.domain.model.TotalNutrition
 import com.example.nutrition_assessment_system_android_app.domain.repository.NutritionRepository
 import com.example.nutrition_assessment_system_android_app.domain.util.Resource
 import okhttp3.MediaType.Companion.toMediaType
@@ -24,6 +29,21 @@ class NutritionRepositoryImpl @Inject constructor(
             },
             transform = { response ->
                 response.toDomain()
+            }
+        )
+    }
+
+    override suspend fun saveMeal(dish: Dish): Resource<Meal> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                nutritionApiService.saveMeal(
+                    SaveMealRequest(
+                        dish = dish.toDishData()
+                    )
+                )
+            },
+            transform = { response ->
+                response.data.toDomain()
             }
         )
     }

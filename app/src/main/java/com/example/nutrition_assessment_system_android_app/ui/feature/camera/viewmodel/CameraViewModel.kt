@@ -6,6 +6,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import com.example.nutrition_assessment_system_android_app.domain.usecase.nutrition.AnalyzeImageUseCase
+import com.example.nutrition_assessment_system_android_app.domain.usecase.nutrition.SaveMealUseCase
 import com.example.nutrition_assessment_system_android_app.ui.common.component.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(
-    private val analyzeImageUseCase: AnalyzeImageUseCase
+    private val analyzeImageUseCase: AnalyzeImageUseCase,
+    private val saveMealUseCase: SaveMealUseCase
 ): BaseViewModel<CameraIntent, CameraViewStates.CameraViewState, CameraViewStates.CameraViewModelState>(
     initState = CameraViewStates.CameraViewModelState()
 ) {
@@ -63,6 +65,39 @@ class CameraViewModel @Inject constructor(
                 }
                 is CameraIntent.OnIngredientRemoved -> {
                     handleIngredientRemoved(intent.ingredientId)
+                }
+                is CameraIntent.SaveMeal -> {
+                    val currentDish = viewModelState.value.dish ?: return@launch
+
+                    viewModelState.update {
+                        it.copy(isLoading = true)
+                    }
+
+                    saveMealUseCase.execute(currentDish).reduce(
+                        onSuccess = {
+                            viewModelState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    dish = null,
+                                    isEditing = false,
+                                    errorMessage = null,
+                                )
+                            }
+                        },
+                        onError = { message, _ ->
+                            viewModelState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    errorMessage = message,
+                                )
+                            }
+                        },
+                        onLoading = {
+                            viewModelState.update {
+                                it.copy(isLoading = true)
+                            }
+                        }
+                    )
                 }
             }
         }
