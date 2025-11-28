@@ -10,5 +10,5 @@ import java.io.File
 interface NutritionRepository {
     suspend fun analyzePhoto(image: File): Resource<Dish>
 
-    suspend fun saveMeal(dish: Dish): Resource<Meal>
+    suspend fun saveMeal(dish: Dish, type: Int?): Resource<Meal>
 }

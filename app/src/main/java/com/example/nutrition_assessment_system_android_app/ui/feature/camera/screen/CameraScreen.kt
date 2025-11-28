@@ -275,6 +275,10 @@ fun CameraScreen(
                 onSave = {
                     viewModel.onTriggerIntent(CameraIntent.SaveMeal)
                     showSheet = false
+                },
+                selectedMealType = uiState.typeMeal,
+                onMealTypeChange = { type ->
+                    viewModel.onTriggerIntent(CameraIntent.SetMealType(type))
                 }
             )
         }

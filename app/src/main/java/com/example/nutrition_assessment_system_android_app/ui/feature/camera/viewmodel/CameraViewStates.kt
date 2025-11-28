@@ -4,6 +4,7 @@ import androidx.camera.core.ImageCapture
 import com.example.nutrition_assessment_system_android_app.domain.model.Dish
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewModelState
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewState
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.enums.MealType
 
 sealed class CameraViewStates {
     data class CameraViewState(
@@ -16,6 +17,7 @@ sealed class CameraViewStates {
         val imageCapture: ImageCapture? = null,
         val dish: Dish? = null,
         val isEditing: Boolean = false,
+        val typeMeal: MealType? = null,
     ): ViewState()
 
     data class CameraViewModelState(
@@ -28,6 +30,7 @@ sealed class CameraViewStates {
         val imageCapture: ImageCapture? = null,
         val dish: Dish? = null,
         val isEditing: Boolean = false,
+        val typeMeal: MealType? = null,
     ): ViewModelState() {
         override fun toUiState(): ViewState {
             return CameraViewState(
@@ -40,6 +43,7 @@ sealed class CameraViewStates {
                 imageCapture = imageCapture,
                 dish = dish,
                 isEditing = isEditing,
+                typeMeal = typeMeal,
             )
         }
     }

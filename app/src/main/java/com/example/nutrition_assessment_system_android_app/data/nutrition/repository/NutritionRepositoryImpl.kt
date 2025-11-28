@@ -33,12 +33,13 @@ class NutritionRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun saveMeal(dish: Dish): Resource<Meal> {
+    override suspend fun saveMeal(dish: Dish, type: Int?): Resource<Meal> {
         return ApiHelper.safeApiCall(
             apiCall = {
                 nutritionApiService.saveMeal(
                     SaveMealRequest(
-                        dish = dish.toDishData()
+                        dish = dish.toDishData(),
+                        type = type
                     )
                 )
             },

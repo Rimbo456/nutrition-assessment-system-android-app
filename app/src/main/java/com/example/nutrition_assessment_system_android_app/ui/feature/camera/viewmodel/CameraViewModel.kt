@@ -5,6 +5,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
+import com.example.nutrition_assessment_system_android_app.domain.params.SaveMealParams
 import com.example.nutrition_assessment_system_android_app.domain.usecase.nutrition.AnalyzeImageUseCase
 import com.example.nutrition_assessment_system_android_app.domain.usecase.nutrition.SaveMealUseCase
 import com.example.nutrition_assessment_system_android_app.ui.common.component.viewmodel.BaseViewModel
@@ -73,7 +74,12 @@ class CameraViewModel @Inject constructor(
                         it.copy(isLoading = true)
                     }
 
-                    saveMealUseCase.execute(currentDish).reduce(
+                    saveMealUseCase.execute(
+                        SaveMealParams(
+                            dish = currentDish,
+                            type = viewModelState.value.typeMeal?.ordinal
+                        )
+                    ).reduce(
                         onSuccess = {
                             viewModelState.update {
                                 it.copy(
@@ -98,6 +104,11 @@ class CameraViewModel @Inject constructor(
                             }
                         }
                     )
+                }
+                is CameraIntent.SetMealType -> {
+                    viewModelState.update {
+                        it.copy(typeMeal = intent.type)
+                    }
                 }
             }
         }

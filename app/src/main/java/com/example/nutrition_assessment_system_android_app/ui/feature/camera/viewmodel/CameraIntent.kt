@@ -3,6 +3,7 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.camera.vi
 import android.content.Context
 import androidx.camera.core.ImageCapture
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewIntent
+import com.example.nutrition_assessment_system_android_app.ui.feature.camera.enums.MealType
 import java.io.File
 
 sealed interface CameraIntent : ViewIntent {
@@ -18,4 +19,5 @@ sealed interface CameraIntent : ViewIntent {
     data class OnIngredientWeightChanged(val ingredientId: String, val weight: Double) : CameraIntent
     data class OnIngredientRemoved(val ingredientId: String) : CameraIntent
     object SaveMeal : CameraIntent
+    data class SetMealType(val type: MealType) : CameraIntent
 }
