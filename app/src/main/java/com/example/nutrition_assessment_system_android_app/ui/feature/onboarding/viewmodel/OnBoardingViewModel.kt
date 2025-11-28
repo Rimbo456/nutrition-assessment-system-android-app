@@ -119,46 +119,42 @@ class OnBoardingViewModel @Inject constructor(
             current.isActivityLevelValid &&
             current.isGoalValid)
         {
+            viewModelState.update { it.copy(isLoading = true, errorMessage = null) }
+
+            viewModelScope.launch {
+                updateProfileUserUseCase.execute(
+                    param = UpdateUserProfileParams(
+                        gender = current.gender!!,
+                        age = current.age!!,
+                        height = current.height!!,
+                        weight = current.weight!!,
+                        activityLevel = current.activityLevel!!,
+                        goal = current.goal!!
+                    )
+                ).reduce(
+                    onSuccess = {
+                        viewModelState.update {
+                            it.copy(
+                                isLoading = false,
+                                navigateToHome = createOneTimeEvent(true) {
+                                    viewModelState.update { it.copy(navigateToHome = null) }
+                                }
+                            )
+                        }
+                    },
+                    onError = { message, _ ->
+                        viewModelState.update {
+                            it.copy(isLoading = false, errorMessage = message)
+                        }
+                    },
+                    onLoading = {
+                        viewModelState.update { it.copy(isLoading = true) }
+                    }
+                )
+            }
+        } else {
             viewModelState.update { it.copy(errorMessage = "Vui lòng hoàn thành tất cả các bước") }
             return
-        }
-
-        viewModelState.update { it.copy(isLoading = true, errorMessage = null) }
-
-        viewModelScope.launch {
-            updateProfileUserUseCase.execute(
-                param = UpdateUserProfileParams(
-                    gender = current.gender!!,
-                    age = current.age!!,
-                    height = current.height!!,
-                    weight = current.weight!!,
-                    activityLevel = current.activityLevel!!,
-                    goal = current.goal!!
-                )
-            ).reduce(
-                onSuccess = {
-                    viewModelState.update {
-                        it.copy(
-                            isLoading = false,
-                        )
-                    }
-                },
-                onError = { message, _ ->
-                    viewModelState.update {
-                        it.copy(isLoading = false, errorMessage = message)
-                    }
-                },
-                onLoading = {
-                    viewModelState.update { it.copy(isLoading = true) }
-                }
-            )
-        }
-
-        // Temporary: Mark as complete without domain call
-        viewModelState.update {
-            it.copy(
-                isLoading = false,
-            )
         }
     }
 }

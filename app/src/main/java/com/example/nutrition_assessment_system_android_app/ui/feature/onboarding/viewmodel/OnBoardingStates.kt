@@ -27,6 +27,8 @@ class OnBoardingStates {
         val isWeightValid: Boolean = false,
         val isActivityLevelValid: Boolean = false,
         val isGoalValid: Boolean = false,
+
+        val navigateToHome: OneTimeEvent<Boolean>? = null,
     ): ViewState()
 
     data class OnBoardingViewModelState(
@@ -48,6 +50,8 @@ class OnBoardingStates {
         val isWeightValid: Boolean = false,
         val isActivityLevelValid: Boolean = false,
         val isGoalValid: Boolean = false,
+
+        val navigateToHome: OneTimeEvent<Boolean>? = null,
     ): ViewModelState() {
         override fun toUiState(): ViewState {
             return OnBoardingViewState(
@@ -65,6 +69,7 @@ class OnBoardingStates {
                 isWeightValid = isWeightValid,
                 isActivityLevelValid = isActivityLevelValid,
                 isGoalValid = isGoalValid,
+                navigateToHome = navigateToHome
             )
         }
     }
