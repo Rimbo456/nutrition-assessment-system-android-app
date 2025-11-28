@@ -131,4 +131,15 @@ class UserRepositoryImpl @Inject constructor(
     override fun observeAuthState(): Flow<Boolean> {
         return firebaseAuthHelper.observeAuthState()
     }
+
+    override suspend fun getCurrentUser(): Resource<User> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                userApiService.getCurrentUser()
+            },
+            transform = { response ->
+                response.data.toUser()
+            }
+        )
+    }
 }
