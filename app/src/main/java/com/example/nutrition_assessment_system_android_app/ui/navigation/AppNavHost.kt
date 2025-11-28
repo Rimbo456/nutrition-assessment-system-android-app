@@ -17,6 +17,7 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.auth.navig
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.navigation.chatNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.feature.camera.navigation.cameraNavGraph
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.navigation.homeNavGraph
+import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.navigation.onboardingNavGraph
 
 @Composable
 fun AppNavHost(
@@ -48,5 +49,7 @@ fun AppNavHost(
         chatNavGraph(navController)
 
         cameraNavGraph(navController)
+
+        onboardingNavGraph(navController)
     }
 }
