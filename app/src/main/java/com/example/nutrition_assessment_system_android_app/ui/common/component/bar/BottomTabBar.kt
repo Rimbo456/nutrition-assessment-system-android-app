@@ -32,7 +32,8 @@ import com.google.accompanist.pager.PagerState
 @Composable
 fun BottomTabBar(
     pagerState: PagerState,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
+    navigateToCamera: () -> Unit = { }
 ) {
     Row(
         modifier = Modifier
@@ -60,7 +61,7 @@ fun BottomTabBar(
         )
         CustomIconButton(
             icon = Lucide.Camera,
-            onClick = {  },
+            onClick = { navigateToCamera() },
             colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.primary),
             iconColors = MaterialTheme.colorScheme.onPrimary,
             sizeIcon = 25.dp,

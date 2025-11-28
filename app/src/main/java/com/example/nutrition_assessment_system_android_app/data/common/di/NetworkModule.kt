@@ -2,8 +2,11 @@ package com.example.nutrition_assessment_system_android_app.data.common.di
 
 import android.content.Context
 import com.example.nutrition_assessment_system_android_app.data.auth.FirebaseAuthHelper
+import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.NutritionApiService
+import com.example.nutrition_assessment_system_android_app.data.chat.datasource.remote.ChatApiService
 import com.example.nutrition_assessment_system_android_app.ui.common.auth.GoogleSignInHelper
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.interceptor.AuthInterceptor
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.interceptor.ResponseLoggingInterceptor
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -23,11 +26,11 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-//        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(ResponseLoggingInterceptor())
-//            .addInterceptor(authInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     }
 
@@ -35,7 +38,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.2.105:3000/") // Replace with your base URL
+            .baseUrl("http://192.168.1.9:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -55,5 +58,17 @@ object NetworkModule {
     @Singleton
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNutritionApiService(retrofit: Retrofit): NutritionApiService {
+        return retrofit.create(NutritionApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatApiService(retrofit: Retrofit): ChatApiService {
+        return retrofit.create(ChatApiService::class.java)
     }
 }

@@ -3,8 +3,8 @@ package com.example.nutrition_assessment_system_android_app.ui.common.component.
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,27 +12,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.icons.lucide.Camera
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.*
 
 @Composable
 fun CustomIconButton(
     icon: ImageVector,
     onClick: () -> Unit,
-    colors: IconButtonColors,
-    iconColors: Color,
-    sizeIcon: Dp,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
+    iconColors: Color = Color.Black,
+    sizeIcon: Dp = 24.dp,
+    colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
+    contentDescription: String? = null,
 ) {
     IconButton(
-        onClick = { onClick() },
-        colors = colors,
-        modifier = modifier
+        onClick = onClick,
+        modifier = modifier,
+        colors = colors
     ) {
         Icon(
             imageVector = icon,
             tint = iconColors,
-            contentDescription = null,
+            contentDescription = contentDescription,
             modifier = Modifier.size(sizeIcon)
         )
     }
@@ -40,13 +41,11 @@ fun CustomIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun CustomIconButtonPreview() {
+private fun CustomIconButtonPreview() {
     CustomIconButton(
         icon = Lucide.Camera,
         onClick = {},
-        colors = IconButtonDefaults.iconButtonColors(Color.White),
         iconColors = Color.Black,
-        sizeIcon = 36.dp,
-        modifier = Modifier
+        sizeIcon = 28.dp
     )
 }

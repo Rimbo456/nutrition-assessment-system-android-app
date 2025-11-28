@@ -1,7 +1,11 @@
 package com.example.nutrition_assessment_system_android_app.data.common.di
 
+import com.example.nutrition_assessment_system_android_app.data.chat.repository.ChatRepositoryImpl
 import com.example.nutrition_assessment_system_android_app.data.common.datastore.PreferencesRepositoryImpl
+import com.example.nutrition_assessment_system_android_app.data.nutrition.repository.NutritionRepositoryImpl
 import com.example.nutrition_assessment_system_android_app.data.user.repository.UserRepositoryImpl
+import com.example.nutrition_assessment_system_android_app.domain.repository.NutritionRepository
+import com.example.nutrition_assessment_system_android_app.domain.repository.ChatRepository
 import com.example.nutrition_assessment_system_android_app.domain.repository.PreferencesRepository
 import com.example.nutrition_assessment_system_android_app.domain.repository.UserRepository
 import dagger.Binds
@@ -26,4 +30,15 @@ abstract class RepositoryModule {
         userRepositoryImpl: UserRepositoryImpl
     ) : UserRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindNutritionRepository(
+        nutritionRepositoryImpl: NutritionRepositoryImpl
+    ) : NutritionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChatRepository(
+        chatRepositoryImpl: ChatRepositoryImpl
+    ): ChatRepository
 }
