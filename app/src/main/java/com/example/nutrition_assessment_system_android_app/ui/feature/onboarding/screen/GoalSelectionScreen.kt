@@ -44,17 +44,6 @@ fun GoalSelectionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState) {
-        Log.d("GoalSelectionScreen", "UI State changed: $uiState")
-
-        uiState.navigateToHome?.let { event ->
-            navController.navigate("home") {
-                popUpTo("onboarding") { inclusive = true }
-            }
-            event.onConsumed()
-        }
-    }
-
     Scaffold(
         bottomBar = {
             Surface(

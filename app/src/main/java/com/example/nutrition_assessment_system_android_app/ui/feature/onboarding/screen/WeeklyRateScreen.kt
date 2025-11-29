@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,17 @@ fun WeeklyRateScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        Log.d("GoalSelectionScreen", "UI State changed: $uiState")
+
+        uiState.navigateToHome?.let { event ->
+            navController.navigate("home") {
+                popUpTo("onboarding") { inclusive = true }
+            }
+            event.onConsumed()
+        }
+    }
 
     Scaffold(
         bottomBar = {

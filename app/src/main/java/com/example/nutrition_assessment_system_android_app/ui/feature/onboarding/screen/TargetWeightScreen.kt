@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.NumberPicker
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingHeader
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.component.OnboardingProgressIndicator
+import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
@@ -128,8 +129,8 @@ fun TargetWeightScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             NumberPicker(
-                value = uiState.weight?.toInt() ?: 65,
-                onValueChange = { TODO() },
+                value = uiState.targetWeight?.toInt() ?: 65,
+                onValueChange = { viewModel.onTriggerIntent(OnBoardingIntent.SetTargetWeight(it.toDouble())) },
                 minValue = 30,
                 maxValue = 300,
                 unit = "kg",

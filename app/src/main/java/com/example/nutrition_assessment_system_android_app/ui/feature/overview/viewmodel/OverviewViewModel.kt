@@ -23,7 +23,6 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun basicCalculation() {
-        viewModelState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             basicCalculationUseCase.execute(Unit).reduce(
                 onSuccess = { data ->

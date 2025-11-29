@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.overview.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,16 +43,23 @@ import com.composables.icons.lucide.Zap
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DailyIntakeCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsItem
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    viewModel: OverviewViewModel
+    viewModel: OverviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(uiState) {
+        Log.d("OverviewScreen", "UI State updated: $uiState")
+
+        viewModel.onTriggerIntent(OverviewIntent.GetBasicInfo)
+    }
 
     Column(
         modifier = Modifier
@@ -166,19 +175,19 @@ fun OverviewScreen(
                 items = listOf(
                     StatisticsItem(
                         label = "Protein",
-                        value = "45/60g",
+                        value = "45/${uiState.proteinTarget?.toInt()}g",
                         percentage = "75%",
                         progress = 0.75f
                     ),
                     StatisticsItem(
                         label = "Carbs",
-                        value = "120/200g",
+                        value = "120/${uiState.carbTarget?.toInt()}g",
                         percentage = "60%",
                         progress = 0.60f
                     ),
                     StatisticsItem(
                         label = "Fat",
-                        value = "30/50g",
+                        value = "30/${uiState.fatTarget?.toInt()}g",
                         percentage = "60%",
                         progress = 0.60f
                     )
