@@ -33,6 +33,8 @@ interface UserRepository {
         height: Int,
         weight: Float,
         activityLevel: String,
-        goal: String
+        goal: String,
+        targetWeight : Double,
+        weeklyRate : Double
     ): Resource<User>
 }

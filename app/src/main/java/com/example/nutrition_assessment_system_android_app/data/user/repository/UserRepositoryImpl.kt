@@ -150,7 +150,9 @@ class UserRepositoryImpl @Inject constructor(
         height: Int,
         weight: Float,
         activityLevel: String,
-        goal: String
+        goal: String,
+        targetWeight : Double,
+        weeklyRate : Double
     ): Resource<User> {
         return ApiHelper.safeApiCall(
             apiCall = {
@@ -161,7 +163,9 @@ class UserRepositoryImpl @Inject constructor(
                         weight = weight,
                         height = height,
                         activityLevel = activityLevel,
-                        goal = goal
+                        goal = goal,
+                        targetWeight = targetWeight,
+                        weeklyRate = weeklyRate
                     )
                 )
             },

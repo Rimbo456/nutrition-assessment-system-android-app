@@ -76,12 +76,12 @@ fun GoalSelectionScreen(
 
                     Button(
                         onClick = {
-                            viewModel.onTriggerIntent(OnBoardingIntent.SubmitOnboardingData)
+                            navController.navigate("onboarding/target-weight")
                         },
                         enabled = uiState.isGoalValid,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Hoàn thành")
+                        Text("Tiếp tục")
                     }
                 }
             }
@@ -97,7 +97,7 @@ fun GoalSelectionScreen(
         ) {
             OnboardingProgressIndicator(
                 currentStep = 6,
-                totalSteps = 6
+                totalSteps = 8
             )
 
             OnboardingHeader(

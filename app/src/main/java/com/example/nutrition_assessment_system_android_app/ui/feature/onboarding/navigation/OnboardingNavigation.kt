@@ -65,5 +65,21 @@ fun NavGraphBuilder.onboardingNavGraph(
             val viewModel: OnBoardingViewModel = hiltViewModel(parentEntry)
             GoalSelectionScreen(viewModel, navController)
         }
+
+        composable("onboarding/target-weight") {
+            val parentEntry = remember(navController.currentBackStackEntry) {
+                navController.getBackStackEntry("onboarding")
+            }
+            val viewModel: OnBoardingViewModel = hiltViewModel(parentEntry)
+            TargetWeightScreen(viewModel, navController)
+        }
+
+        composable("onboarding/weekly-rate") {
+            val parentEntry = remember(navController.currentBackStackEntry) {
+                navController.getBackStackEntry("onboarding")
+            }
+            val viewModel: OnBoardingViewModel = hiltViewModel(parentEntry)
+            WeeklyRateScreen(viewModel, navController)
+        }
     }
 }

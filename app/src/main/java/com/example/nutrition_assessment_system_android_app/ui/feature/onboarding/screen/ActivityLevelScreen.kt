@@ -65,7 +65,7 @@ fun ActivityLevelScreen(
         ) {
             OnboardingProgressIndicator(
                 currentStep = 5,
-                totalSteps = 6
+                totalSteps = 8
             )
 
             OnboardingHeader(

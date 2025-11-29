@@ -7,4 +7,6 @@ data class UpdateUserProfileRequest(
     val height: Int,
     val activityLevel: String,
     val goal: String,
+    val targetWeight : Double,
+    val weeklyRate : Double
 )

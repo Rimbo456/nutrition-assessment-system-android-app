@@ -16,6 +16,8 @@ fun UserDto.toEntity(): UserEntity {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
+        targetWeight = this.targetWeight,
+        weeklyRate = this.weeklyRate,
         preferences = this.preferences,
         createAt = this.createAt,
     )
@@ -33,6 +35,8 @@ fun UserEntity.toDto(): UserDto {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
+        targetWeight = this.targetWeight,
+        weeklyRate = this.weeklyRate,
         preferences = this.preferences,
         createAt = this.createAt,
     )
@@ -50,6 +54,8 @@ fun UserDto.toUser(): User {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
+        targetWeight = this.targetWeight,
+        weeklyRate = this.weeklyRate,
         preferences = this.preferences?.toPreferences(),
         createAt = this.createAt,
     )
@@ -67,6 +73,8 @@ fun UserEntity.toUser(): User {
         height = this.height,
         activityLevel = this.activityLevel,
         goal = this.goal,
+        targetWeight = this.targetWeight,
+        weeklyRate = this.weeklyRate,
         preferences = this.preferences?.toPreferences(),
         createAt = this.createAt,
     )
