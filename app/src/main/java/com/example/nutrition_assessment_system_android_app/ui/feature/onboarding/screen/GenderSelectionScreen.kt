@@ -62,7 +62,7 @@ fun GenderSelectionScreen(
         ) {
             OnboardingProgressIndicator(
                 currentStep = 1,
-                totalSteps = 6
+                totalSteps = 8
             )
 
             OnboardingHeader(

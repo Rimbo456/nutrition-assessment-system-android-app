@@ -13,5 +13,7 @@ sealed interface OnBoardingIntent: ViewIntent {
     data class SetWeight(val weight: Float): OnBoardingIntent
     data class SetActivityLevel(val activityLevel: String): OnBoardingIntent
     data class SetGoal(val goal: String): OnBoardingIntent
+    data class SetTargetWeight(val targetWeight: Double): OnBoardingIntent
+    data class SetWeeklyRate(val weeklyRate: Double): OnBoardingIntent
     object SubmitOnboardingData: OnBoardingIntent
 }

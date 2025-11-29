@@ -17,7 +17,9 @@ class UpdateProfileUserUseCase @Inject constructor(
             height = param.height,
             weight = param.weight,
             activityLevel = param.activityLevel,
-            goal = param.goal
+            goal = param.goal,
+            targetWeight = param.targetWeight,
+            weeklyRate = param.weeklyRate
         )
     }
 }

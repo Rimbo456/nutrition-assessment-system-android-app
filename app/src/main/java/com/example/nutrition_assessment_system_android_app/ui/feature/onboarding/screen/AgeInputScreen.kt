@@ -65,7 +65,7 @@ fun AgeInputScreen(
         ) {
             OnboardingProgressIndicator(
                 currentStep = 2,
-                totalSteps = 6
+                totalSteps = 8
             )
 
             OnboardingHeader(

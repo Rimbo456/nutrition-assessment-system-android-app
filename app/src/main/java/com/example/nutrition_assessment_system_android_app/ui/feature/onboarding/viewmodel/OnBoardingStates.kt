@@ -19,6 +19,8 @@ class OnBoardingStates {
         val weight: Float? = null,
         val activityLevel: String? = null,
         val goal: String? = null,
+        val targetWeight: Double? = null,
+        val weeklyRate: Double? = null,
 
         // Validation states
         val isGenderValid: Boolean = false,
@@ -42,6 +44,8 @@ class OnBoardingStates {
         val weight: Float? = null,
         val activityLevel: String? = null,
         val goal: String? = null,
+        val targetWeight: Double? = null,
+        val weeklyRate: Double? = null,
 
         // Validation states
         val isGenderValid: Boolean = false,
@@ -69,7 +73,9 @@ class OnBoardingStates {
                 isWeightValid = isWeightValid,
                 isActivityLevelValid = isActivityLevelValid,
                 isGoalValid = isGoalValid,
-                navigateToHome = navigateToHome
+                navigateToHome = navigateToHome,
+                targetWeight = targetWeight,
+                weeklyRate = weeklyRate
             )
         }
     }

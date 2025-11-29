@@ -11,6 +11,8 @@ data class User(
     val height: Int?,
     val activityLevel: String?,
     val goal: String?,
+    val targetWeight: Double? = null,
+    val weeklyRate: Double? = null,
     val preferences: Preferences?,
     val createAt: String,
 )

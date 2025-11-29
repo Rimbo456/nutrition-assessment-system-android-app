@@ -29,6 +29,8 @@ class OnBoardingViewModel @Inject constructor(
                 is OnBoardingIntent.SetActivityLevel -> handleSetActivityLevel(intent.activityLevel)
                 is OnBoardingIntent.SetGoal -> handleSetGoal(intent.goal)
                 is OnBoardingIntent.SubmitOnboardingData -> handleCompleteOnBoarding()
+                is OnBoardingIntent.SetTargetWeight -> handleSetTargetWeight(intent.targetWeight)
+                is OnBoardingIntent.SetWeeklyRate -> handleSetWeeklyRate(intent.weeklyRate)
             }
         }
     }
@@ -108,6 +110,26 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
+    private fun handleSetTargetWeight(targetWeight: Double) {
+        // Currently not used in onboarding validation
+        viewModelState.update { current ->
+            current.copy(
+                targetWeight = targetWeight,
+                errorMessage = null
+            )
+        }
+    }
+
+    private fun handleSetWeeklyRate(weeklyRate: Double) {
+        // Currently not used in onboarding validation
+        viewModelState.update { current ->
+            current.copy(
+                weeklyRate = weeklyRate,
+                errorMessage = null
+            )
+        }
+    }
+
     // ==================== Completion Handler ====================
 
     private fun handleCompleteOnBoarding() {
@@ -129,7 +151,9 @@ class OnBoardingViewModel @Inject constructor(
                         height = current.height!!,
                         weight = current.weight!!,
                         activityLevel = current.activityLevel!!,
-                        goal = current.goal!!
+                        goal = current.goal!!,
+                        targetWeight = current.targetWeight!!,
+                        weeklyRate = current.weeklyRate!!
                     )
                 ).reduce(
                     onSuccess = {

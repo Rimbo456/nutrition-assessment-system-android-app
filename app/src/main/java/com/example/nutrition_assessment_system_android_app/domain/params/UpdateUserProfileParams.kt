@@ -6,5 +6,7 @@ data class UpdateUserProfileParams(
     val height: Int,
     val weight: Float,
     val activityLevel: String,
-    val goal: String
+    val goal: String,
+    val targetWeight: Double,
+    val weeklyRate: Double,
 )

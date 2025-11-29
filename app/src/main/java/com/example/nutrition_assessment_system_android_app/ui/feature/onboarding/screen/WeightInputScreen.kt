@@ -65,7 +65,7 @@ fun WeightInputScreen(
         ) {
             OnboardingProgressIndicator(
                 currentStep = 4,
-                totalSteps = 6
+                totalSteps = 8
             )
 
             OnboardingHeader(
