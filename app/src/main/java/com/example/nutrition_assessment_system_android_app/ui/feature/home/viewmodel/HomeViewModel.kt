@@ -20,7 +20,15 @@ class HomeViewModel @Inject constructor(
                 is HomeIntent.CheckInformationUser -> {
                     getProfileUseCase.execute(Unit).reduce(
                         onSuccess = { data ->
-                            if (data.gender == null || data.age == null || data.weight == null || data.height == null) {
+                            if (data.gender == null ||
+                                data.age == null ||
+                                data.weight == null ||
+                                data.height == null ||
+                                data.activityLevel == null ||
+                                data.goal == null ||
+                                data.targetWeight == null ||
+                                data.weeklyRate == null
+                                ){
                                 viewModelState.update {
                                     it.copy(
                                         isLoading = false,
