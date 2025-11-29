@@ -20,12 +20,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.icons.lucide.Activity
 import com.composables.icons.lucide.Apple
 import com.composables.icons.lucide.Calendar
@@ -38,10 +41,15 @@ import com.composables.icons.lucide.Zap
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DailyIntakeCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsItem
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OverviewScreen() {
+fun OverviewScreen(
+    viewModel: OverviewViewModel
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
 
     Column(
@@ -135,7 +143,7 @@ fun OverviewScreen() {
                 title = "Daily Calories",
                 percentage = "68%",
                 progress = 1360,
-                sum = 2000,
+                sum = uiState.caloriesTarget?.toInt() ?: 0,
                 icon = Lucide.Flame,
                 iconBackgroundColor = MaterialTheme.colorScheme.error
             )
@@ -145,7 +153,7 @@ fun OverviewScreen() {
                 title = "Water Intake",
                 percentage = "75%",
                 progress = 1800,
-                sum = 2400,
+                sum = uiState.waterTarget?.toInt() ?: 0,
                 icon = Lucide.Droplets,
                 iconBackgroundColor = MaterialTheme.colorScheme.tertiary
             )

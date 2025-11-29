@@ -3,5 +3,5 @@ package com.example.nutrition_assessment_system_android_app.ui.feature.overview.
 import com.example.nutrition_assessment_system_android_app.ui.common.interfaces.ViewIntent
 
 sealed interface OverviewIntent: ViewIntent {
-
+    object GetBasicInfo: OverviewIntent
 }

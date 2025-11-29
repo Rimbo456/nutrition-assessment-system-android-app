@@ -16,22 +16,25 @@ class OverviewViewModel @Inject constructor(
 ) {
     override fun onTriggerIntent(intent: OverviewIntent) {
         viewModelScope.launch {
-
+            when (intent) {
+                is OverviewIntent.GetBasicInfo -> basicCalculation()
+            }
         }
     }
 
     fun basicCalculation() {
+        viewModelState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             basicCalculationUseCase.execute(Unit).reduce(
                 onSuccess = { data ->
                     viewModelState.update {
                         it.copy(
                             isLoading = false,
-                            caloriesTarget = data["CaloriesTarget"],
-                            proteinTarget = data["ProteinTarget"],
-                            fatTarget = data["FatTarget"],
-                            carbTarget = data["CarbTarget"],
-                            waterTarget = data["WaterTarget"]
+                            caloriesTarget = data.caloriesTarget,
+                            proteinTarget = data.proteinTarget,
+                            fatTarget = data.fatTarget,
+                            carbTarget = data.carbTarget,
+                            waterTarget = data.waterTarget
                         )
                     }
                 },
