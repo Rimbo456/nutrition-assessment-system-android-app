@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Settings
@@ -38,6 +40,8 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.profile.co
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.WeightInputDialogComposable
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.WeightJourneyCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.WeightProgressCard
+import com.example.nutrition_assessment_system_android_app.ui.feature.profile.viewmodel.ProfileIntent
+import com.example.nutrition_assessment_system_android_app.ui.feature.profile.viewmodel.ProfileViewModel
 
 data class UserData(
     val name: String = "Nguyễn Văn An",
@@ -58,8 +62,11 @@ data class UserData(
 
 @Composable
 fun ProfileScreen(
-    userData: UserData = UserData()
+    userData: UserData = UserData(),
+    viewModel: ProfileViewModel
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     var isWeightModalOpen by remember { mutableStateOf(false) }
     var currentWeight by remember { mutableStateOf(userData.currentWeight) }
 
@@ -67,6 +74,11 @@ fun ProfileScreen(
     val weightRemaining = currentWeight - userData.targetWeight
     val progressPercentage =
         ((userData.startWeight - currentWeight) / (userData.startWeight - userData.targetWeight)) * 100
+
+    LaunchedEffect(uiState) {
+        viewModel.onTriggerIntent(ProfileIntent.GetUserProfile)
+        viewModel.onTriggerIntent(ProfileIntent.GetBasicInfo)
+    }
 
     Column(
         modifier = Modifier
@@ -125,11 +137,11 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = userData.name,
+                    text = uiState.name ?: "Unknown",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = userData.goal,
+                    text = uiState.goal ?: "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -152,7 +164,7 @@ fun ProfileScreen(
         // Delegate main parts to components. All callbacks (update weight) routed here.
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             WeightProgressCard(
-                currentWeight = currentWeight,
+                currentWeight = uiState.currentWeight ?: 0.0,
                 weightLost = weightLost,
                 weightRemaining = weightRemaining,
                 progressPercentage = progressPercentage,
@@ -218,5 +230,4 @@ fun ProfileScreen(
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
 }

@@ -9,6 +9,11 @@ class ProfileViewStates {
         val errorMessage: String? = null,
         val name: String? = null,
         val avatar: String? = null,
+        val currentWeight: Double? = null,
+        val targetWeight: Double? = null,
+        val targetWater: Double? = null,
+        val targetCalories: Double? = null,
+        val goal: String? = null,
     ): ViewState()
 
     data class ProfileViewModelState(
@@ -16,6 +21,11 @@ class ProfileViewStates {
         val errorMessage: String? = null,
         val name: String? = null,
         val avatar: String? = null,
+        val currentWeight: Double? = null,
+        val targetWeight: Double? = null,
+        val targetWater: Double? = null,
+        val targetCalories: Double? = null,
+        val goal: String? = null,
     ): ViewModelState() {
         override fun toUiState(): ViewState {
             return ProfileViewState(
@@ -23,6 +33,11 @@ class ProfileViewStates {
                 errorMessage = errorMessage,
                 name = name,
                 avatar = avatar,
+                currentWeight = currentWeight,
+                targetWeight = targetWeight,
+                targetWater = targetWater,
+                targetCalories = targetCalories,
+                goal = goal,
             )
         }
     }

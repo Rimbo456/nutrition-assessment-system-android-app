@@ -28,6 +28,10 @@ class ProfileViewModel @Inject constructor(
                                 it.copy(
                                     isLoading = false,
                                     name = user.name,
+                                    avatar = user.avatar,
+                                    currentWeight = user.weight?.toDouble(),
+                                    targetWeight = user.targetWeight,
+                                    goal = user.goal
                                 )
                             }
                         },
@@ -54,6 +58,8 @@ class ProfileViewModel @Inject constructor(
                             viewModelState.update {
                                 it.copy(
                                     isLoading = false,
+                                    targetWater = data.waterTarget,
+                                    targetCalories = data.caloriesTarget
                                 )
                             }
                         },
@@ -64,8 +70,18 @@ class ProfileViewModel @Inject constructor(
                                     errorMessage = message
                                 )
                             }
+                        },
+                        onLoading = {
+                            viewModelState.update {
+                                it.copy(
+                                    isLoading = true
+                                )
+                            }
                         }
                     )
+                }
+                is ProfileIntent.UpdateWeight -> {
+                    //TODO
                 }
             }
         }
