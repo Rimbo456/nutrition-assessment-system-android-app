@@ -20,6 +20,7 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.overview.s
 import com.example.nutrition_assessment_system_android_app.ui.feature.chat.screen.PreChatScreen
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.viewmodel.HomeIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.home.viewmodel.HomeViewModel
+import com.example.nutrition_assessment_system_android_app.ui.feature.profile.screen.ProfileScreen
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
@@ -68,7 +69,7 @@ fun HomeScreen(
         }
     ) {
         HorizontalPager(
-            count = 3,
+            count = 4,
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
@@ -85,6 +86,9 @@ fun HomeScreen(
                             navController.navigate("chat")
                         }
                     )
+                }
+                3 -> {
+                    ProfileScreen()
                 }
             }
         }

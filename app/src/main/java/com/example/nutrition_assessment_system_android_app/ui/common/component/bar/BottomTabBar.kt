@@ -45,12 +45,7 @@ fun BottomTabBar(
             .fillMaxWidth()
             .height(80.dp)
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
-                    )
-                )
+                MaterialTheme.colorScheme.surface
             )
             .shadow(
                 elevation = 16.dp,
@@ -131,11 +126,8 @@ fun BottomTabBar(
                     )
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        // Profile click action
+                    .clickable {
+                        onTabSelected(3)
                     }
             ) {
                 Image(
