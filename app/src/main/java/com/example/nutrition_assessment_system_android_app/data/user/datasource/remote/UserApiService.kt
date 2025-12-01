@@ -1,10 +1,13 @@
 package com.example.nutrition_assessment_system_android_app.data.user.datasource.remote
 
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.dto.UserDto
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.InsertWeightLogRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.LoginRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.RegisterRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.GetProfileResponse
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.UpdateUserProfileRequest
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.GetWeightLogResponse
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.InsertWeightLog
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.LoginResponse
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.RegisterResponse
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.response.UpdateUserProfileResponse
@@ -26,4 +29,10 @@ interface UserApiService {
 
     @PATCH("/api/user/profile")
     suspend fun updateUserProfile(@Body request: UpdateUserProfileRequest): Response<UpdateUserProfileResponse>
+
+    @POST("/api/user/weight-log")
+    suspend fun insertWeightLog(@Body request: InsertWeightLogRequest): Response<InsertWeightLog>
+
+    @GET("/api/user/weight-history")
+    suspend fun getWeightHistory(): Response<GetWeightLogResponse>
 }

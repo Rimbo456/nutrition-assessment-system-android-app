@@ -1,6 +1,7 @@
 package com.example.nutrition_assessment_system_android_app.domain.repository
 
 import com.example.nutrition_assessment_system_android_app.domain.model.User
+import com.example.nutrition_assessment_system_android_app.domain.model.WeightLog
 import com.example.nutrition_assessment_system_android_app.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -37,4 +38,7 @@ interface UserRepository {
         targetWeight : Double,
         weeklyRate : Double
     ): Resource<User>
+
+    suspend fun insertWeightLog(weight: Float): Resource<Unit>
+    fun getWeightLogs(forceRefresh: Boolean): Flow<Resource<List<WeightLog>>>
 }

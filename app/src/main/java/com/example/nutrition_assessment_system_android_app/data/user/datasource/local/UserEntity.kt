@@ -16,6 +16,7 @@ data class UserEntity(
     val height: Int?,
     val activityLevel: String?,
     val goal: String?,
+    val startWeight: Double? = null,
     val targetWeight: Double? = null,
     val weeklyRate: Double? = null,
     val preferences: PreferencesDto?,

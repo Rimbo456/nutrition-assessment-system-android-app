@@ -13,6 +13,7 @@ data class UserDto (
     val height: Int? = null,
     val activityLevel: String? = null,
     val goal: String? = null,
+    val startWeight: Double? = null,
     val targetWeight: Double? = null,
     val weeklyRate: Double? = null,
     val preferences: PreferencesDto? = null,

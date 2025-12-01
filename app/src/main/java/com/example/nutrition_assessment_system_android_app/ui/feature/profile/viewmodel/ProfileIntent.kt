@@ -6,4 +6,5 @@ sealed interface ProfileIntent: ViewIntent {
     object GetUserProfile: ProfileIntent
     object GetBasicInfo: ProfileIntent
     data class UpdateWeight(val weight: Double): ProfileIntent
+    object GetWeightLogs: ProfileIntent
 }

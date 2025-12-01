@@ -10,9 +10,10 @@ import com.example.nutrition_assessment_system_android_app.data.chat.datasource.
 import com.example.nutrition_assessment_system_android_app.data.common.util.Converters
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.local.UserDao
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.local.UserEntity
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.local.WeightLogEntity
 
 @Database(
-    entities = [UserEntity::class, MessageEntity::class, ChatSessionEntity::class],
+    entities = [UserEntity::class, MessageEntity::class, ChatSessionEntity::class, WeightLogEntity::class],
     version = 1
 )
 @TypeConverters(Converters::class)

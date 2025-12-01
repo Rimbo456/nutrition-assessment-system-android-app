@@ -3,12 +3,20 @@ package com.example.nutrition_assessment_system_android_app.data.user.repository
 import android.util.Log
 import com.example.nutrition_assessment_system_android_app.data.auth.FirebaseAuthHelper
 import com.example.nutrition_assessment_system_android_app.data.common.util.ApiHelper
+import com.example.nutrition_assessment_system_android_app.data.common.util.NetworkBoundResource
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.local.UserDao
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.local.WeightLogEntity
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.UserApiService
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.dto.WeightLogDto
+import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.InsertWeightLogRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.LoginRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.RegisterRequest
 import com.example.nutrition_assessment_system_android_app.data.user.datasource.remote.request.UpdateUserProfileRequest
+import com.example.nutrition_assessment_system_android_app.data.user.mapper.toDomain
+import com.example.nutrition_assessment_system_android_app.data.user.mapper.toEntity
 import com.example.nutrition_assessment_system_android_app.data.user.mapper.toUser
 import com.example.nutrition_assessment_system_android_app.domain.model.User
+import com.example.nutrition_assessment_system_android_app.domain.model.WeightLog
 import com.example.nutrition_assessment_system_android_app.domain.repository.PreferencesRepository
 import com.example.nutrition_assessment_system_android_app.domain.repository.UserRepository
 import com.example.nutrition_assessment_system_android_app.domain.util.Resource
@@ -18,6 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.HttpException
@@ -28,6 +37,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val firebaseAuthHelper: FirebaseAuthHelper,
     private val preferencesRepository: PreferencesRepository,
+    private val userDao: UserDao
 ) : UserRepository {
 
     override suspend fun registerUser(
@@ -117,6 +127,7 @@ class UserRepositoryImpl @Inject constructor(
                             preferencesRepository.updateAuthToken(token)
                         }
                     }
+
                     else -> {}
                 }
             } else {
@@ -151,8 +162,8 @@ class UserRepositoryImpl @Inject constructor(
         weight: Float,
         activityLevel: String,
         goal: String,
-        targetWeight : Double,
-        weeklyRate : Double
+        targetWeight: Double,
+        weeklyRate: Double
     ): Resource<User> {
         return ApiHelper.safeApiCall(
             apiCall = {
@@ -173,5 +184,45 @@ class UserRepositoryImpl @Inject constructor(
                 response.data.toUser()
             }
         )
+    }
+
+    override suspend fun insertWeightLog(weight: Float): Resource<Unit> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                userApiService.insertWeightLog(InsertWeightLogRequest(weight = weight))
+            },
+            transform = {
+                Unit
+            }
+        )
+    }
+
+    override fun getWeightLogs(forceRefresh: Boolean): Flow<Resource<List<WeightLog>>> {
+        return object : NetworkBoundResource<List<WeightLog>, List<WeightLogDto>>() {
+            override fun loadFromDb(): Flow<List<WeightLog>> {
+                return userDao.getAllWeightLogs().map { entities ->
+                    entities.map { it.toDomain() }
+                }
+            }
+
+            override fun shouldFetch(data: List<WeightLog>?): Boolean {
+                return forceRefresh || data == null || data.isEmpty()
+            }
+
+            override suspend fun createCall(): List<WeightLogDto> {
+                val res = userApiService.getWeightHistory()
+                if (res.isSuccessful) {
+                    return res.body()?.data ?: emptyList()
+                } else {
+                    throw Exception("Api error code: ${res.code()}")
+                }
+            }
+
+            override suspend fun saveCallResult(data: List<WeightLogDto>) {
+                userDao.insertWeightLogs(
+                    data.map { it.toEntity() }
+                )
+            }
+        }.asFlow()
     }
 }

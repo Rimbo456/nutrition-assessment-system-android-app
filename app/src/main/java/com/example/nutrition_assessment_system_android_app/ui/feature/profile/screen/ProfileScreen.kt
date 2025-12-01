@@ -1,5 +1,6 @@
 package com.example.nutrition_assessment_system_android_app.ui.feature.profile.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,10 +31,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Settings
+import com.example.nutrition_assessment_system_android_app.domain.model.WeightLog
+import com.example.nutrition_assessment_system_android_app.ui.common.component.chart.BarEntry
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.DailyCaloriesCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.QuickStatsCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.profile.component.WaterActivityCard
@@ -63,7 +67,7 @@ data class UserData(
 @Composable
 fun ProfileScreen(
     userData: UserData = UserData(),
-    viewModel: ProfileViewModel
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -78,6 +82,9 @@ fun ProfileScreen(
     LaunchedEffect(uiState) {
         viewModel.onTriggerIntent(ProfileIntent.GetUserProfile)
         viewModel.onTriggerIntent(ProfileIntent.GetBasicInfo)
+        viewModel.onTriggerIntent(ProfileIntent.GetWeightLogs)
+
+        Log.d("ProfileScreen", "UI State changed: $uiState")
     }
 
     Column(
@@ -166,8 +173,24 @@ fun ProfileScreen(
             WeightProgressCard(
                 currentWeight = uiState.currentWeight ?: 0.0,
                 weightLost = weightLost,
-                weightRemaining = weightRemaining,
-                progressPercentage = progressPercentage,
+                weightRemaining = uiState.currentWeight?.let {
+                    val temp = uiState.currentWeight!! - uiState.targetWeight!!
+                    Log.d("ProfileScreen", "Weight remaining calculation: currentWeight=$currentWeight, targetWeight=${uiState.targetWeight}, temp=$temp")
+                    if (temp < 0.0) temp * -1 else temp
+                } ?: 0.0,
+                progressPercentage = uiState.currentWeight?.let {
+                    val complete = if ((uiState.currentWeight!! - uiState.startWeight!!) < 0) {
+                        (uiState.currentWeight!! - uiState.startWeight!!) * -1
+                    } else {
+                        uiState.currentWeight!! - uiState.startWeight!!
+                    }
+                    val total = if ((uiState.targetWeight!! - uiState.startWeight!!) < 0) {
+                        (uiState.targetWeight!! - uiState.startWeight!!) * -1
+                    } else {
+                        uiState.targetWeight!! - uiState.startWeight!!
+                    }
+                    complete/total * 100
+                } ?: 0.0,
                 onUpdateClick = { isWeightModalOpen = true }
             )
         }
@@ -175,7 +198,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            DailyCaloriesCard(dailyCalories = userData.dailyCalories)
+            DailyCaloriesCard(dailyCalories = uiState.targetCalories?.toInt() ?: 0)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -196,7 +219,33 @@ fun ProfileScreen(
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            WeightJourneyCard()
+            WeightJourneyCard(
+                entries = if (uiState.weightLogs.isNotEmpty()) {
+                    val current = uiState.weightLogs.toMutableList()
+                    if (current.size < 7) {
+                        val logsToAdd = 7 - current.size
+                        for (log in 1..logsToAdd) {
+                            current.add(
+                                WeightLog(
+                                    weight = 0.0,
+                                    dateString = "",
+                                    id = "",
+                                    timestamp = "",
+                                )
+                            )
+                        }
+                        current.map { BarEntry(it.weight.toFloat(), it.dateString) }
+                    } else {
+                        uiState.weightLogs.map {
+                            BarEntry(it.weight.toFloat(), it.dateString)
+                        }
+                    }
+                } else emptyList(),
+                maxValue = 100f,
+                highlightIndex = 1,
+                onBarSelected = { },
+                midLineValue = 50f,
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -207,7 +256,14 @@ fun ProfileScreen(
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 modifier = Modifier.padding(bottom = 12.dp)
             )
-            QuickStatsCard()
+            QuickStatsCard(
+                startWeight = uiState.startWeight ?: 0.0,
+                targetWeight = uiState.targetWeight ?: 0.0,
+                currentBMI = uiState.bmi ?: 0.0,
+                todayProteinIntake = 0.0,
+                carbohydrateIntake = 0.0,
+                carbohydrateGoal = uiState.carbohydrateGoal ?: 0.0
+            )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -216,10 +272,10 @@ fun ProfileScreen(
     // Weight input modal is a stateless component; the screen handles state update
     if (isWeightModalOpen) {
         WeightInputDialogComposable(
-            currentWeight = currentWeight,
+            currentWeight = uiState.currentWeight ?: 0.0,
             onDismiss = { isWeightModalOpen = false },
             onConfirm = { newWeight ->
-                currentWeight = newWeight
+                viewModel.onTriggerIntent(ProfileIntent.UpdateWeight(newWeight))
                 isWeightModalOpen = false
             }
         )
