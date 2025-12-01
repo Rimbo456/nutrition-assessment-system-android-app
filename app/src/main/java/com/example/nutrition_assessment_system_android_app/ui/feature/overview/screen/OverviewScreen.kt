@@ -31,18 +31,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.composables.icons.lucide.Activity
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.composables.icons.lucide.Apple
-import com.composables.icons.lucide.Calendar
-import com.composables.icons.lucide.ChevronDown
-import com.composables.icons.lucide.Droplets
-import com.composables.icons.lucide.Flame
+import com.composables.icons.lucide.Coffee
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Target
-import com.composables.icons.lucide.Zap
-import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DailyIntakeCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsCard
-import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.StatisticsItem
+import com.composables.icons.lucide.Moon
+import com.composables.icons.lucide.UtensilsCrossed
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DateNavigationBar
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.DailySummaryCard
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.FoodItem
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.MealCard
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.QuickActionsBar
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewViewModel
 
@@ -52,12 +53,41 @@ fun OverviewScreen(
     viewModel: OverviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(uiState) {
-        Log.d("OverviewScreen", "UI State updated: $uiState")
+    // State for UI interactions
+    var searchQuery by remember { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf("Hôm nay, 2 Th12") }
 
+    // Mock data - replace with real data from viewModel
+    val breakfastItems = remember {
+        listOf(
+            FoodItem("1", "Phở bò", 450, 25, 55, 12, "1 tô", "07:30"),
+            FoodItem("2", "Cà phê sữa", 120, 2, 18, 4, "1 ly", "07:45")
+        )
+    }
+
+    val lunchItems = remember {
+        listOf(
+            FoodItem("3", "Cơm gà xối mỡ", 650, 35, 70, 22, "1 phần", "12:00"),
+            FoodItem("4", "Canh chua", 80, 5, 8, 3, "1 bát", "12:00")
+        )
+    }
+
+    val snackItems = remember {
+        listOf(
+            FoodItem("5", "Chuối", 105, 1, 27, 0, "1 quả", "15:30")
+        )
+    }
+
+    // Calculate totals
+    val allItems = breakfastItems + lunchItems + snackItems
+    val totalCalories = allItems.sumOf { it.calories }
+    val totalProtein = allItems.sumOf { it.protein }
+    val totalCarbs = allItems.sumOf { it.carbs }
+    val totalFat = allItems.sumOf { it.fat }
+
+    LaunchedEffect(Unit) {
         viewModel.onTriggerIntent(OverviewIntent.GetBasicInfo)
     }
 
@@ -65,211 +95,112 @@ fun OverviewScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(bottom = 75.dp)
+            .padding(bottom = 80.dp)
             .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Header Section with modern styling
+        // Date Navigation Bar
+        DateNavigationBar(
+            date = selectedDate,
+            onPrevDay = {
+                // TODO: Handle previous day
+            },
+            onNextDay = {
+                // TODO: Handle next day
+            },
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+        )
+
+        // Daily Summary Card
+        DailySummaryCard(
+            caloriesConsumed = totalCalories,
+            caloriesGoal = uiState.caloriesTarget?.toInt() ?: 2000,
+            protein = totalProtein,
+            carbs = totalCarbs,
+            fat = totalFat,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // Quick Actions Bar
+        QuickActionsBar(
+            searchQuery = searchQuery,
+            onSearchChange = { searchQuery = it },
+            onCameraClick = {
+                // TODO: Open camera
+            },
+            onAddFoodClick = {
+                // TODO: Open add food dialog
+            },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // Meal Cards
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                            MaterialTheme.colorScheme.background
-                        )
-                    )
-                )
-                .padding(horizontal = 20.dp)
-                .padding(top = 28.dp, bottom = 24.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // App Title with refined typography
-            Text(
-                text = "CaloriCam",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.displayMedium.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            // Date Picker Button - Modern minimal style
-            Button(
-                onClick = {
-                    // Show Date Picker Dialog
+            // Breakfast
+            MealCard(
+                title = "Bữa sáng",
+                icon = Lucide.Coffee,
+                items = breakfastItems,
+                onAddFood = {
+                    // TODO: Add food to breakfast
                 },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 8.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                ) {
-                    Icon(
-                        imageVector = Lucide.Calendar,
-                        contentDescription = "Select Date",
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "Today",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    )
-                    Icon(
-                        imageVector = Lucide.ChevronDown,
-                        contentDescription = "Select Date",
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+                onEditFood = { foodItem ->
+                    // TODO: Edit food item
+                },
+                onDeleteFood = { foodItem ->
+                    // TODO: Delete food item
                 }
-            }
-        }
-
-        // Main Content Area with refined spacing
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 12.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            // Daily Calorie Intake Card
-            DailyIntakeCard(
-                title = "Daily Calories",
-                percentage = "68%",
-                progress = 1360,
-                sum = uiState.caloriesTarget?.toInt() ?: 0,
-                icon = Lucide.Flame,
-                iconBackgroundColor = MaterialTheme.colorScheme.error
             )
 
-            // Water Intake Card
-            DailyIntakeCard(
-                title = "Water Intake",
-                percentage = "75%",
-                progress = 1800,
-                sum = uiState.waterTarget?.toInt() ?: 0,
-                icon = Lucide.Droplets,
-                iconBackgroundColor = MaterialTheme.colorScheme.tertiary
+            // Lunch
+            MealCard(
+                title = "Bữa trưa",
+                icon = Lucide.UtensilsCrossed,
+                items = lunchItems,
+                onAddFood = {
+                    // TODO: Add food to lunch
+                },
+                onEditFood = { foodItem ->
+                    // TODO: Edit food item
+                },
+                onDeleteFood = { foodItem ->
+                    // TODO: Delete food item
+                }
             )
 
-            // Macronutrients Card
-            StatisticsCard(
-                title = "Macronutrients",
-                icon = Lucide.Target,
-                iconBackgroundColor = MaterialTheme.colorScheme.primary,
-                items = listOf(
-                    StatisticsItem(
-                        label = "Protein",
-                        value = "45/${uiState.proteinTarget?.toInt()}g",
-                        percentage = "75%",
-                        progress = 0.75f
-                    ),
-                    StatisticsItem(
-                        label = "Carbs",
-                        value = "120/${uiState.carbTarget?.toInt()}g",
-                        percentage = "60%",
-                        progress = 0.60f
-                    ),
-                    StatisticsItem(
-                        label = "Fat",
-                        value = "30/${uiState.fatTarget?.toInt()}g",
-                        percentage = "60%",
-                        progress = 0.60f
-                    )
-                ),
-                onClick = { /* Navigate to macronutrients detail */ }
+            // Dinner
+            MealCard(
+                title = "Bữa tối",
+                icon = Lucide.Moon,
+                items = emptyList(),
+                onAddFood = {
+                    // TODO: Add food to dinner
+                },
+                onEditFood = { foodItem ->
+                    // TODO: Edit food item
+                },
+                onDeleteFood = { foodItem ->
+                    // TODO: Delete food item
+                }
             )
 
-            // Micronutrients Card
-            StatisticsCard(
-                title = "Micronutrients",
+            // Snacks
+            MealCard(
+                title = "Ăn vặt",
                 icon = Lucide.Apple,
-                iconBackgroundColor = MaterialTheme.colorScheme.secondary,
-                items = listOf(
-                    StatisticsItem(
-                        label = "Vitamin C",
-                        value = "67/90mg",
-                        percentage = "74%",
-                        progress = 0.74f
-                    ),
-                    StatisticsItem(
-                        label = "Iron",
-                        value = "12/18mg",
-                        percentage = "67%",
-                        progress = 0.67f
-                    ),
-                    StatisticsItem(
-                        label = "Calcium",
-                        value = "800/1000mg",
-                        percentage = "80%",
-                        progress = 0.80f
-                    )
-                ),
-                onClick = { /* Navigate to micronutrients detail */ }
-            )
-
-            // Physical Activity Card
-            StatisticsCard(
-                title = "Physical Activity",
-                icon = Lucide.Activity,
-                iconBackgroundColor = MaterialTheme.colorScheme.tertiary,
-                items = listOf(
-                    StatisticsItem(
-                        label = "Steps",
-                        value = "7,850/10,000",
-                        percentage = "78%",
-                        progress = 0.78f
-                    ),
-                    StatisticsItem(
-                        label = "Active Minutes",
-                        value = "22/30 min",
-                        percentage = "73%",
-                        progress = 0.73f
-                    )
-                ),
-                onClick = { /* Navigate to activity detail */ }
-            )
-
-            // Energy Balance Card
-            StatisticsCard(
-                title = "Energy Balance",
-                icon = Lucide.Zap,
-                iconBackgroundColor = MaterialTheme.colorScheme.primary,
-                items = listOf(
-                    StatisticsItem(
-                        label = "Calories In",
-                        value = "1,360 kcal",
-                        percentage = "68%",
-                        progress = 0.68f
-                    ),
-                    StatisticsItem(
-                        label = "Calories Burned",
-                        value = "2,150 kcal",
-                        percentage = "100%",
-                        progress = 1.0f
-                    ),
-                    StatisticsItem(
-                        label = "Net Balance",
-                        value = "-790 kcal",
-                        percentage = "Deficit",
-                        progress = 0.4f
-                    )
-                )
+                items = snackItems,
+                onAddFood = {
+                    // TODO: Add food to snacks
+                },
+                onEditFood = { foodItem ->
+                    // TODO: Edit food item
+                },
+                onDeleteFood = { foodItem ->
+                    // TODO: Delete food item
+                }
             )
         }
     }
