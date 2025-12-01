@@ -101,12 +101,6 @@ fun ChatScreen(
 
     val isAssistantTyping = uiState.isBotResponse
 
-    val suggestions = listOf(
-        "Phân tích dinh dưỡng của bữa ăn",
-        "Tạo kế hoạch tập luyện",
-        "Gợi ý thực đơn cho 1 ngày",
-        "Theo dõi lượng nước uống"
-    )
 
     Scaffold(
         containerColor = colors.background,
@@ -141,7 +135,7 @@ fun ChatScreen(
                 // Show suggestions only if no messages yet
                 if (uiState.messages.isEmpty()) {
                     SuggestionChipsRow(
-                        suggestions = suggestions,
+                        suggestions = emptyList(),
                         onSuggestionClick = { prompt -> inputText = prompt },
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
