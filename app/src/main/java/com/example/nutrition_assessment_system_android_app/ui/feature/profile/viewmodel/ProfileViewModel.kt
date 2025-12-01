@@ -35,7 +35,10 @@ class ProfileViewModel @Inject constructor(
                                     currentWeight = user.weight?.toDouble(),
                                     targetWeight = user.targetWeight,
                                     startWeight = user.startWeight,
-                                    goal = user.goal
+                                    goal = user.goal,
+                                    height = user.height?.toDouble(),
+                                    weeklyRate = user.weeklyRate,
+                                    age = user.age
                                 )
                             }
                         },
@@ -65,7 +68,9 @@ class ProfileViewModel @Inject constructor(
                                     targetWater = data.waterTarget,
                                     targetCalories = data.caloriesTarget,
                                     bmi = data.bmi,
-                                    carbohydrateGoal = data.carbTarget
+                                    carbohydrateGoal = data.carbTarget,
+                                    targetFat = data.fatTarget,
+                                    targetProtein = data.proteinTarget,
                                 )
                             }
                         },

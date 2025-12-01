@@ -16,6 +16,11 @@ class ProfileViewStates {
         val targetWeight: Double? = null,
         val targetWater: Double? = null,
         val targetCalories: Double? = null,
+        val age: Int? = null,
+        val targetProtein: Double? = null,
+        val targetFat: Double? = null,
+        val height: Double? = null,
+        val weeklyRate: Double? = null,
         val goal: String? = null,
         val bmi: Double? = null,
         val navigateToProfile: OneTimeEvent<Boolean>? = null,
@@ -32,6 +37,11 @@ class ProfileViewStates {
         val startWeight: Double? = null,
         val targetWeight: Double? = null,
         val targetWater: Double? = null,
+        val age: Int? = null,
+        val targetProtein: Double? = null,
+        val targetFat: Double? = null,
+        val height: Double? = null,
+        val weeklyRate: Double? = null,
         val targetCalories: Double? = null,
         val goal: String? = null,
         val bmi: Double? = null,
@@ -54,7 +64,12 @@ class ProfileViewStates {
                 startWeight = startWeight,
                 bmi = bmi,
                 carbohydrateGoal = carbohydrateGoal,
-                weightLogs = weightLogs
+                weightLogs = weightLogs,
+                targetProtein = targetProtein,
+                targetFat = targetFat,
+                height = height,
+                weeklyRate = weeklyRate,
+                age = age
             )
         }
     }
