@@ -2,6 +2,7 @@ package com.example.nutrition_assessment_system_android_app.data.nutrition.repos
 
 import com.example.nutrition_assessment_system_android_app.data.common.util.ApiHelper
 import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.NutritionApiService
+import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.request.GetMealsByDateRequest
 import com.example.nutrition_assessment_system_android_app.data.nutrition.datasource.remote.request.SaveMealRequest
 import com.example.nutrition_assessment_system_android_app.data.nutrition.mapper.toDishData
 import com.example.nutrition_assessment_system_android_app.data.nutrition.mapper.toDomain
@@ -45,6 +46,21 @@ class NutritionRepositoryImpl @Inject constructor(
             },
             transform = { response ->
                 response.data.toDomain()
+            }
+        )
+    }
+
+    override suspend fun getMealsByDate(date: String): Resource<List<Meal>> {
+        return ApiHelper.safeApiCall(
+            apiCall = {
+                nutritionApiService.getMealsByDate(
+                    GetMealsByDateRequest(
+                        date = date
+                    )
+                )
+            },
+            transform = { response ->
+                response.data.map { it.toDomain() }
             }
         )
     }

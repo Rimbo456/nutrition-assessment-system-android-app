@@ -46,6 +46,8 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.overview.c
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.QuickActionsBar
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,38 +59,21 @@ fun OverviewScreen(
 
     // State for UI interactions
     var searchQuery by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf("Hôm nay, 2 Th12") }
-
-    // Mock data - replace with real data from viewModel
-    val breakfastItems = remember {
-        listOf(
-            FoodItem("1", "Phở bò", 450, 25, 55, 12, "1 tô", "07:30"),
-            FoodItem("2", "Cà phê sữa", 120, 2, 18, 4, "1 ly", "07:45")
-        )
-    }
-
-    val lunchItems = remember {
-        listOf(
-            FoodItem("3", "Cơm gà xối mỡ", 650, 35, 70, 22, "1 phần", "12:00"),
-            FoodItem("4", "Canh chua", 80, 5, 8, 3, "1 bát", "12:00")
-        )
-    }
-
-    val snackItems = remember {
-        listOf(
-            FoodItem("5", "Chuối", 105, 1, 27, 0, "1 quả", "15:30")
-        )
-    }
-
-    // Calculate totals
-    val allItems = breakfastItems + lunchItems + snackItems
-    val totalCalories = allItems.sumOf { it.calories }
-    val totalProtein = allItems.sumOf { it.protein }
-    val totalCarbs = allItems.sumOf { it.carbs }
-    val totalFat = allItems.sumOf { it.fat }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
     LaunchedEffect(Unit) {
         viewModel.onTriggerIntent(OverviewIntent.GetBasicInfo)
+        viewModel.onTriggerIntent(
+            OverviewIntent.GetMealsByDate(
+                selectedDate.format(
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                )
+            )
+        )
+    }
+
+    LaunchedEffect(uiState) {
+        Log.d("OverviewScreen", "UI State: $uiState")
     }
 
     Column(
@@ -101,23 +86,38 @@ fun OverviewScreen(
     ) {
         // Date Navigation Bar
         DateNavigationBar(
-            date = selectedDate,
+            date = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
             onPrevDay = {
-                // TODO: Handle previous day
+                selectedDate = selectedDate.minusDays(1)
+                viewModel.onTriggerIntent(
+                    OverviewIntent.GetMealsByDate(
+                        selectedDate.format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        )
+                    )
+                )
             },
             onNextDay = {
-                // TODO: Handle next day
+                val today = LocalDate.now()
+                if (selectedDate.isBefore(today)) {
+                    selectedDate = selectedDate.plusDays(1)
+                }
+                viewModel.onTriggerIntent(
+                    OverviewIntent.GetMealsByDate(
+                        selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    )
+                )
             },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
         // Daily Summary Card
         DailySummaryCard(
-            caloriesConsumed = totalCalories,
+            caloriesConsumed = uiState.totalCalories ?: 0,
             caloriesGoal = uiState.caloriesTarget?.toInt() ?: 2000,
-            protein = totalProtein,
-            carbs = totalCarbs,
-            fat = totalFat,
+            protein = uiState.totalProtein ?: 0,
+            carbs = uiState.totalCarb ?: 0,
+            fat = uiState.totalFat ?: 0,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
@@ -143,7 +143,7 @@ fun OverviewScreen(
             MealCard(
                 title = "Bữa sáng",
                 icon = Lucide.Coffee,
-                items = breakfastItems,
+                items = uiState.breakfastItems,
                 onAddFood = {
                     // TODO: Add food to breakfast
                 },
@@ -159,7 +159,7 @@ fun OverviewScreen(
             MealCard(
                 title = "Bữa trưa",
                 icon = Lucide.UtensilsCrossed,
-                items = lunchItems,
+                items = uiState.lunchItems,
                 onAddFood = {
                     // TODO: Add food to lunch
                 },
@@ -175,7 +175,7 @@ fun OverviewScreen(
             MealCard(
                 title = "Bữa tối",
                 icon = Lucide.Moon,
-                items = emptyList(),
+                items = uiState.dinnerItems,
                 onAddFood = {
                     // TODO: Add food to dinner
                 },
@@ -191,7 +191,7 @@ fun OverviewScreen(
             MealCard(
                 title = "Ăn vặt",
                 icon = Lucide.Apple,
-                items = snackItems,
+                items = uiState.snackItems,
                 onAddFood = {
                     // TODO: Add food to snacks
                 },

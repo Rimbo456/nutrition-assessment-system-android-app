@@ -19,6 +19,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.SquarePen
 import com.composables.icons.lucide.Trash2
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.util.formatTimestampToTimeString
 
 data class FoodItem(
     val id: String,
@@ -199,7 +200,7 @@ private fun FoodItemRow(
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = item.time,
+                            text = formatTimestampToTimeString(item.time),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

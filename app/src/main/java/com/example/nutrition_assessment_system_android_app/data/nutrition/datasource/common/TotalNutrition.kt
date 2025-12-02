@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TotalNutrition(
     val calories: Double,
-    @SerializedName("protein_g") val proteinG: Double,
-    @SerializedName("fat_g") val fatG: Double,
-    @SerializedName("carbs_g") val carbsG: Double
+    @SerializedName("protein") val proteinG: Double,
+    @SerializedName("fat") val fatG: Double,
+    @SerializedName("carbohydrates") val carbsG: Double
 )

@@ -11,4 +11,6 @@ interface NutritionRepository {
     suspend fun analyzePhoto(image: File): Resource<Dish>
 
     suspend fun saveMeal(dish: Dish, type: Int?): Resource<Meal>
+
+    suspend fun getMealsByDate(date: String): Resource<List<Meal>>
 }
