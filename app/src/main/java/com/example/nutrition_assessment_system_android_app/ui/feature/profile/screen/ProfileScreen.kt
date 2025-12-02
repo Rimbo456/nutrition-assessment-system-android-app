@@ -37,8 +37,10 @@ fun getBMICategory(bmi: Double): Pair<String, Color> {
 
 fun getGoalInfo(goalType: String): Pair<String, ImageVector> {
     return when (goalType.lowercase()) {
-        "lose", "giảm cân" -> "Giảm cân" to Lucide.TrendingDown
-        "gain", "tăng cân" -> "Tăng cân" to Lucide.TrendingUp
+        "lose_weight", "giảm cân" -> "Giảm cân" to Lucide.TrendingDown
+        "gain_weight", "tăng cân" -> "Tăng cân" to Lucide.TrendingUp
+        "build_muscle" -> "Xây dựng cơ bắp" to Lucide.Dumbbell
+        "improve_health" -> "Cải thiện sức khỏe" to Lucide.HeartPulse
         else -> "Duy trì" to Lucide.Minus
     }
 }
@@ -58,7 +60,7 @@ fun ProfileScreen(
     val startWeight = uiState.startWeight ?: 0.0
     val bmi = calculateBMI(currentWeight, userHeight)
     val bmiCategory = getBMICategory(bmi)
-    val goalInfo = getGoalInfo(uiState.goal ?: "Giảm cân")
+    val goalInfo = getGoalInfo(uiState.goal ?: "Unknown")
     val weightDiff = currentWeight - targetWeight
     val weeklyWeightChangeGoal = uiState.weeklyRate ?: 0.0
     val weeksToGoal = (kotlin.math.abs(weightDiff) / weeklyWeightChangeGoal).let { ceil(it).toInt() }
@@ -83,6 +85,8 @@ fun ProfileScreen(
         // Profile Info Card
         ProfileInfoCard(
             name = uiState.name ?: "Người dùng",
+            avatar = uiState.avatar,
+            email = uiState.email ?: "",
             age = uiState.age ?: 0,
             userHeight = userHeight,
             currentWeight = currentWeight,
@@ -129,7 +133,6 @@ fun ProfileScreen(
             weightDiff = weightDiff,
             weeklyWeightChangeGoal = weeklyWeightChangeGoal,
             weeksToGoal = weeksToGoal,
-            onUpdateWeightClick = { isWeightModalOpen = true }
         )
 
         Spacer(modifier = Modifier.height(20.dp))

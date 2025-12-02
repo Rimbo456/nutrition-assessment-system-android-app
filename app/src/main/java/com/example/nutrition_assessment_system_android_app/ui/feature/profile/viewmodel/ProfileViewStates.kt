@@ -11,6 +11,7 @@ class ProfileViewStates {
         val errorMessage: String? = null,
         val name: String? = null,
         val avatar: String? = null,
+        val email: String? = null,
         val currentWeight: Double? = null,
         val startWeight: Double? = null,
         val targetWeight: Double? = null,
@@ -33,6 +34,7 @@ class ProfileViewStates {
         val errorMessage: String? = null,
         val name: String? = null,
         val avatar: String? = null,
+        val email: String? = null,
         val currentWeight: Double? = null,
         val startWeight: Double? = null,
         val targetWeight: Double? = null,
@@ -69,7 +71,8 @@ class ProfileViewStates {
                 targetFat = targetFat,
                 height = height,
                 weeklyRate = weeklyRate,
-                age = age
+                age = age,
+                email = email,
             )
         }
     }

@@ -23,7 +23,6 @@ fun GoalCard(
     weightDiff: Double,
     weeklyWeightChangeGoal: Double,
     weeksToGoal: Int,
-    onUpdateWeightClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -64,7 +63,6 @@ fun GoalCard(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 1.dp,
-                onClick = onUpdateWeightClick
             ) {
                 Row(
                     modifier = Modifier.padding(12.dp),
