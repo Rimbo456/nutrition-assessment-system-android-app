@@ -32,6 +32,7 @@ class ProfileViewModel @Inject constructor(
                                     isLoading = false,
                                     name = user.name,
                                     avatar = user.avatar,
+                                    email = user.email,
                                     currentWeight = user.weight?.toDouble(),
                                     targetWeight = user.targetWeight,
                                     startWeight = user.startWeight,

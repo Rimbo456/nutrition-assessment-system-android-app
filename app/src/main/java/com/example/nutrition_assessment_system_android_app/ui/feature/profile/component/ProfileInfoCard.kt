@@ -13,11 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.composables.icons.lucide.*
 
 @Composable
 fun ProfileInfoCard(
     name: String,
+    avatar: String? = null,
+    email: String,
     age: Int,
     userHeight: Double,
     currentWeight: Double,
@@ -66,19 +69,30 @@ fun ProfileInfoCard(
                         color = MaterialTheme.colorScheme.surface,
                         tonalElevation = 4.dp
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(4.dp)
-                                .clip(CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Lucide.User,
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        if (avatar != null) {
+                            AsyncImage(
+                                model = avatar,
+                                contentDescription = "User Avatar",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(4.dp)
+                                    .clip(CircleShape),
                             )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(4.dp)
+                                    .clip(CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Lucide.User,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(32.dp),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                     Surface(
@@ -120,7 +134,7 @@ fun ProfileInfoCard(
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = name,
+                            text = email,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
@@ -128,19 +142,19 @@ fun ProfileInfoCard(
                     }
                 }
 
-                FilledTonalButton(
-                    onClick = onEditClick,
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
-                ) {
-                    Icon(
-                        imageVector = Lucide.User,
-                        contentDescription = null,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Sửa", fontSize = 12.sp)
-                }
+//                FilledTonalButton(
+//                    onClick = onEditClick,
+//                    modifier = Modifier.height(32.dp),
+//                    contentPadding = PaddingValues(horizontal = 12.dp)
+//                ) {
+//                    Icon(
+//                        imageVector = Lucide.User,
+//                        contentDescription = null,
+//                        modifier = Modifier.size(14.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(4.dp))
+//                    Text("Sửa", fontSize = 12.sp)
+//                }
             }
 
             // Stats Grid
