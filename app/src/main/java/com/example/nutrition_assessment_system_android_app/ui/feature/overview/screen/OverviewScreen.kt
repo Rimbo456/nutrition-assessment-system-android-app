@@ -44,6 +44,7 @@ import com.example.nutrition_assessment_system_android_app.ui.feature.overview.c
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.FoodItem
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.MealCard
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.component.QuickActionsBar
+import com.example.nutrition_assessment_system_android_app.ui.feature.overview.util.formatDateForUi
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewIntent
 import com.example.nutrition_assessment_system_android_app.ui.feature.overview.viewmodel.OverviewViewModel
 import java.time.LocalDate
@@ -86,7 +87,7 @@ fun OverviewScreen(
     ) {
         // Date Navigation Bar
         DateNavigationBar(
-            date = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            date = formatDateForUi(selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
             onPrevDay = {
                 selectedDate = selectedDate.minusDays(1)
                 viewModel.onTriggerIntent(
